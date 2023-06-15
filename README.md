@@ -25,12 +25,12 @@ Features
 
 ##  Deployment
 
-7) Build a Docker image using docker build -t my_dnd_bot ..
-8) Run a Docker container from the image using docker run -d --restart unless-stopped my_dnd_bot.
+7) Build a Docker image using `docker build -t my_dnd_bot .`.
+8) Run a Docker container from the image using `docker run -d --restart unless-stopped my_dnd_bot`.
 
 ##  To update the bot:
 
 9) Make changes to your source files.
-10) Rebuild the Docker image with docker build --no-cache -t my_dnd_bot ..
-11) Stop and remove the old container using docker rm -f <container_id>.
+10) Rebuild the Docker image with `docker build --no-cache -t my_dnd_bot .`.
+11) Stop and remove the old container using `docker rm -f <container_id>`.
 12) Run a new container from the updated image.

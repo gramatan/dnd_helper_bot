@@ -29,14 +29,15 @@ async def send_welcome(message: types.Message):
     welcome_message = (
         "Привет! Я бот, который может помочь в ваших DnD приключениях, бросая кости за вас. "
         "Просто отправьте сообщение в формате '/NdM+K', где N - количество кубиков, "
-        "M - количество граней на кубике, K - модификатор (необязательно). Например, '/2d20+5'. "
+        "M - количество граней на кубике, K - модификатор (необязательно). Например, /2d20+5'. "
         "Я вычислю результат для вас!\n\n"
         "Вы также можете использовать команду /roll N, где N - это количество сторон на кубике "
         "(по умолчанию 20, если N не указано). "
         "Это простой способ быстро бросить один кубик. Например, /roll 100 бросит 100-гранный кубик за вас.\n\n"
         "Вы также можете установить информацию о следующей игре с помощью команды /set, "
         "а потом получить ее обратно с помощью команды /game.\n\n"
-        "Если вы хотите найти описание заклинания, просто используйте команду '/spell Название заклинания'.\n\n"
+        "Если вы хотите найти описание заклинания, просто используйте команду /spell Название заклинания.\n"
+        "Для поиска по справочнику классов, используйте команду /class Название навыка.\n\n"
         "Вот список сайтов, которые могут помочь:\n"
         "[DnD.su. Справочник по заклинаниям](https://dnd.su/spells/)\n"  
         "[DnD.su. Справочник по классам](https://dnd.su/class/)\n"
@@ -64,11 +65,31 @@ async def roll_dice_command(message: types.Message):
     await message.answer(answer)
 
 
-@dp.message_handler(commands=['spell'])
-async def spell_search(message: types.Message):
+@dp.message_handler(commands=['class'])
+async def class_list(message: types.Message):
+    user = message.from_user.first_name
     if len(message.text) < 8:
         await message.reply(
-            "Введи слова для поиска после /spell\n"
+            f"{user}, необходимо ввести слова для поиска после /class, орочья ты башка\n"
+            "например:\n"
+            "/class магический мастеровой\n"
+            "/class рывок"
+            )
+    else:
+        spell = message.text[7:]    # remove '/class ' part
+        answer = (
+            f"{user}, твоё заклинание где-то здесь:\n"
+            f"[{spell}](https://dnd.su/class/?search={spell})"
+        )
+        await message.reply(answer, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
+
+
+@dp.message_handler(commands=['spell'])
+async def spell_search(message: types.Message):
+    user = message.from_user.first_name
+    if len(message.text) < 8:
+        await message.reply(
+            f"{user}, ты забыл ввести слова для поиска после /spell\n"
             "например:\n"
             "/spell водоворот\n"
             "/spell Власть над водами"
