@@ -52,7 +52,6 @@ async def send_welcome(message: types.Message):
 
 @dp.message_handler(commands=['roll'])
 async def roll_dice_command(message: types.Message):
-    # print(message.text)
     try:
         dice = int(message.text[6:])
     except ValueError:
