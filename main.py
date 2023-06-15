@@ -16,7 +16,7 @@ c.execute('''CREATE TABLE IF NOT EXISTS games
 conn.commit()
 conn.close()
 
-API_TOKEN = TOKEN
+API_TOKEN = TOKEN   # your telegram bot token
 
 # Initialize bot and dispatcher
 logging.basicConfig(level=logging.INFO)
