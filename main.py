@@ -2,7 +2,7 @@ import logging
 import re
 from aiogram import Bot, Dispatcher, types
 
-from func import roll_dice
+from func import roll_dice, dx_roll
 from config import TOKEN
 import sqlite3
 
@@ -23,6 +23,7 @@ logging.basicConfig(level=logging.INFO)
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
 
+
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
     welcome_message = (
@@ -30,18 +31,55 @@ async def send_welcome(message: types.Message):
         "Просто отправьте сообщение в формате '/NdM+K', где N - количество кубиков, "
         "M - количество граней на кубике, K - модификатор (необязательно). Например, '/2d20+5'. "
         "Я вычислю результат для вас!\n\n"
+        "Вы также можете использовать команду /roll N, где N - это количество сторон на кубике "
+        "(по умолчанию 20, если N не указано). "
+        "Это простой способ быстро бросить один кубик. Например, /roll 100 бросит 100-гранный кубик за вас.\n\n"
         "Вы также можете установить информацию о следующей игре с помощью команды /set, "
         "а потом получить ее обратно с помощью команды /game.\n\n"
+        "Если вы хотите найти описание заклинания, просто используйте команду '/spell Название заклинания'.\n\n"
         "Вот список сайтов, которые могут помочь:\n"
         "[DnD.su. Справочник по заклинаниям](https://dnd.su/spells/)\n"  
         "[DnD.su. Справочник по классам](https://dnd.su/class/)\n"
-        "[DnD.su. Книги и руководства](https://dnd.su/books/)\n\n"
+        "[DnD.su. Справочник по расам](https://dnd.su/race/)\n\n"
         "[Интерактивный чарлист](https://longstoryshort.app/characters/list/)\n\n"
         "[Правила для начинающих игроков](https://www.dungeonsanddragons.ru/bookfull/5ed/5e%20starter%20set%20-%20basic%20rules%20RUS.pdf)\n"
         "[Миниатюры персонажей Hero Forge](https://www.heroforge.com/)\n"
     )
 
     await message.reply(welcome_message, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
+
+
+@dp.message_handler(commands=['roll'])
+async def roll_dice_command(message: types.Message):
+    # print(message.text)
+    try:
+        dice = int(message.text[6:])
+    except ValueError:
+        dice = 20
+
+    roll, sides = dx_roll(dice)
+
+    user = message.from_user.first_name
+    answer = f"бросок d{sides} от {user}: {roll}"
+    await message.answer(answer)
+
+
+@dp.message_handler(commands=['spell'])
+async def spell_search(message: types.Message):
+    if len(message.text) < 8:
+        await message.reply(
+            "Введи слова для поиска после /spell\n"
+            "например:\n"
+            "/spell водоворот\n"
+            "/spell Власть над водами"
+            )
+    else:
+        spell = message.text[7:]    # remove '/spell ' part
+        answer = (
+            "твоё заклинание где-то здесь:\n"
+            f"[{spell}](https://dnd.su/spells/?search={spell})"
+        )
+        await message.reply(answer, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
 
 
 @dp.message_handler(commands=['set'])
@@ -84,7 +122,7 @@ async def get_game(message: types.Message):
 @dp.message_handler()
 async def dice_roll(message: types.Message):
     requests = re.findall(r'/(.*?)(?=\s|$|[^0-9dD+-])', message.text, re.IGNORECASE)
-    if requests:
+    if requests and all('d' in req or 'D' in req for req in requests):
         results = [f'/{request}: {roll_dice(request)}' for request in requests]
         await message.reply('\n'.join(results))
 
