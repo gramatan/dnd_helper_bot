@@ -4,27 +4,35 @@ from masterdata import CLASSES, CLASSIC_CLASSES, RACES, CLASSIC_RACES, STORIES
 from masterdata import CLASSIC_STORIES, CLASS_LINK, RACE_LINK, STORY_LINK
 
 
-def roll_dice(expression) -> str:
-    # Prevent huge numbers
-    if any(int(num) > 100 for num in re.findall(r'\d+', expression)):
+def roll_dice(expression):
+    # Special case for /d or /D
+    if expression.lower() == 'd':
+        return f'{random.randint(1, 20)} of 20'
+
+    # Check for numbers larger than 1000
+    if any(int(num) > 1000 for num in re.findall(r'\d+', expression)):
         return '¯\_(ツ)_/¯ для больших чисел используй /roll'
 
     parts = re.findall(r'([+-]?)(\d*)[dD](\d+)?|([+-]\d+)', expression, re.IGNORECASE)
     rolls = []
     total = 0
+
     for part in parts:
         sign, dice, sides, const = part
         sign = -1 if sign == '-' else 1
+
         if dice or sides:
-            dice = int(dice) if dice else 1
-            sides = int(sides) if sides else 1  # Default to 1 if no sides specified (e.g., "+5" or "-5")
+            dice = max(int(dice) if dice else 1, 1)  # At least one dice
+            sides = int(sides) if sides else 20  # Default to 20 sides if no sides specified (e.g., "+5" or "-5")
             for _ in range(dice):
                 roll = sign * random.randint(1, sides)
                 rolls.append(str(roll))
                 total += roll
+
         if const:  # If there is a constant modifier, add or subtract it from the total
             total += sign * int(const)
             rolls.append(str(sign * int(const)))
+
     return f'{"+".join(rolls)} = {total}' if len(rolls) > 1 else f'{total}'
 
 
@@ -63,13 +71,11 @@ def make_character(char_class='', char_race='', char_story='', classic=False) ->
     race_link = RACE_LINK + race_link + '/'
     story_link = STORY_LINK + story_link + '/'
 
-    answer = (
+    return (
         f"[{char_class}]({class_link})\n"
         f"[{char_race}]({race_link})\n"
         f"[{char_story}]({story_link})\n"
     )
-
-    return answer
 
 
 # for i in range(5):

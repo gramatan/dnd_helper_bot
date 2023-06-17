@@ -1,10 +1,12 @@
+import sqlite3
+
 import logging
 import re
 from aiogram import Bot, Dispatcher, types
 
-from func import roll_dice, dx_roll
+from func import roll_dice, dx_roll, make_character
 from config import TOKEN
-import sqlite3
+from keyboard import character_creation_keyboard
 
 conn = sqlite3.connect('dnd_bot.db')  # Creates a new db file if it doesn't exist
 c = conn.cursor()
@@ -141,13 +143,9 @@ async def get_game(message: types.Message):
 
 @dp.message_handler()
 async def dice_roll(message: types.Message):
-    requests = re.findall(r'/(.*?)(?=\s|$|[^0-9dD+-])', message.text, re.IGNORECASE)
-    # if valid_requests and all('d' in req or 'D' in req for req in valid_requests):
-    #     results = [f'/{request}: {roll_dice(request)}' for request in requests]
-    #     await message.reply('\n'.join(results))
-    valid_requests = [req for req in requests if 'd' in req or 'D' in req]
-    if valid_requests:
-        results = [f'/{request}: {roll_dice(request)}' for request in valid_requests]
+    requests = re.findall(r'/([+-]?\d*[dD]\d+[+-]?\d*|[dD])', message.text, re.IGNORECASE)
+    if requests:
+        results = [f'/{request}: {roll_dice(request)}' for request in requests]
         await message.reply('\n'.join(results))
 
 
