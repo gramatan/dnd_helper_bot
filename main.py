@@ -141,14 +141,7 @@ async def get_game(message: types.Message):
         await message.reply(game_info[0])
 
 
-@dp.message_handler()
-async def dice_roll(message: types.Message):
-    requests = re.findall(r'/([+-]?\d*[dD]\d+[+-]?\d*|[dD])', message.text, re.IGNORECASE)
-    if requests:
-        results = [f'/{request}: {roll_dice(request)}' for request in requests]
-        await message.reply('\n'.join(results))
-
-
+# character creation part
 user_choices = {}  # global variable to store current user choices for character creation
 
 
@@ -220,6 +213,15 @@ async def generate(callback_query: types.CallbackQuery):
     characters = '\n---\n'.join(make_character(char_class, race, story, preset == 'Классика') for _ in range(num_chars))
     # Send characters
     await bot.send_message(chat_id, characters)
+
+
+# main handler for expressions
+@dp.message_handler()
+async def dice_roll(message: types.Message):
+    requests = re.findall(r'/([+-]?\d*[dD]\d+[+-]?\d*|[dD])', message.text, re.IGNORECASE)
+    if requests:
+        results = [f'/{request}: {roll_dice(request)}' for request in requests]
+        await message.reply('\n'.join(results))
 
 
 if __name__ == '__main__':
