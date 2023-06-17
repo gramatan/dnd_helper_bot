@@ -169,8 +169,8 @@ STORIES = {
     'Антрополог': '756-anthropologist',
     'Археолог': '791-archaeologist',
 }
-for story, link in STORIES.items():
-    print(f"'{story[:23]}': '{link}',")
+# for story, link in STORIES.items():
+#     print(f"'{story[:23]}': '{link}',")
 # STORIES = {
 #     'Артист': '757-entertainer',
 #     'Беспризорник': '758-urchin',
