@@ -1,8 +1,10 @@
 import re
 import random
+from masterdata import CLASSES, CLASSIC_CLASSES, RACES, CLASSIC_RACES, STORIES
+from masterdata import CLASSIC_STORIES, CLASS_LINK, RACE_LINK, STORY_LINK
 
 
-def roll_dice(expression):
+def roll_dice(expression) -> str:
     # Prevent huge numbers
     if any(int(num) > 100 for num in re.findall(r'\d+', expression)):
         return '¯\_(ツ)_/¯ для больших чисел используй /roll'
@@ -31,3 +33,45 @@ def dx_roll(sides=20):
         sides = 20
     roll = random.randint(1, sides)
     return roll, sides
+
+
+def make_character(char_class='', char_race='', char_story='', classic=False) -> str:
+    if not char_class or char_class not in CLASSES:
+        if not classic:
+            char_class, class_link = random.choice(list(CLASSES.items()))
+        else:
+            char_class, class_link = random.choice(list(CLASSIC_CLASSES.items()))
+    else:
+        class_link = CLASSES[char_class]
+
+    if not char_race or char_race not in RACES:
+        if not classic:
+            char_race, race_link = random.choice(list(RACES.items()))
+        else:
+            char_race, race_link = random.choice(list(CLASSIC_RACES.items()))
+    else:
+        race_link = RACES[char_race]
+    if not char_story or char_story not in STORIES:
+        if not classic:
+            char_story, story_link = random.choice(list(STORIES.items()))
+        else:
+            char_story, story_link = random.choice(list(CLASSIC_STORIES.items()))
+    else:
+        story_link = STORIES[char_story]
+
+    class_link = CLASS_LINK + class_link + '/'
+    race_link = RACE_LINK + race_link + '/'
+    story_link = STORY_LINK + story_link + '/'
+
+    answer = (
+        f"[{char_class}]({class_link})\n"
+        f"[{char_race}]({race_link})\n"
+        f"[{char_story}]({story_link})\n"
+    )
+
+    return answer
+
+
+# for i in range(5):
+#     print(make_character(classic=False))
+#     print('---')
