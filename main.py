@@ -142,8 +142,12 @@ async def get_game(message: types.Message):
 @dp.message_handler()
 async def dice_roll(message: types.Message):
     requests = re.findall(r'/(.*?)(?=\s|$|[^0-9dD+-])', message.text, re.IGNORECASE)
-    if requests and all('d' in req or 'D' in req for req in requests):
-        results = [f'/{request}: {roll_dice(request)}' for request in requests]
+    # if valid_requests and all('d' in req or 'D' in req for req in valid_requests):
+    #     results = [f'/{request}: {roll_dice(request)}' for request in requests]
+    #     await message.reply('\n'.join(results))
+    valid_requests = [req for req in requests if 'd' in req or 'D' in req]
+    if valid_requests:
+        results = [f'/{request}: {roll_dice(request)}' for request in valid_requests]
         await message.reply('\n'.join(results))
 
 
