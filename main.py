@@ -149,6 +149,79 @@ async def dice_roll(message: types.Message):
         await message.reply('\n'.join(results))
 
 
+user_choices = {}  # global variable to store current user choices for character creation
+
+
+def generate_current_settings_message(chat_id):
+    user_choice = user_choices.get(chat_id, {})
+    preset = user_choice.get('preset', 'Классика')
+    char_class = user_choice.get('char_class', 'Случайно')
+    race = user_choice.get('race', 'Случайно')
+    story = user_choice.get('story', 'Случайно')
+    num_chars = user_choice.get('num_chars', 3)
+
+    return (
+        f"Время создать персонажа! Текущие параметры:\n"
+        f"Пресет: {preset}\n"
+        f"Класс: {char_class}\n"
+        f"Раса: {race}\n"
+        f"Предыстория: {story}\n"
+        f"Количество персонажей: {num_chars}\n"
+    )
+
+
+@dp.message_handler(commands=['create_character'])
+async def create_character(message: types.Message):
+    answer = (
+        "Время создать персонажа! Текущие параметры:\n"
+        "Пресет: Классика\n"
+        "Класс: Случайный\n"
+        "Раса: Случайно\n"
+        "Предыстория: Случайно\n"
+        "Количество персонажей: 3\n"
+    )
+    await bot.send_message(
+        message.chat.id,
+        answer,
+        reply_markup=character_creation_keyboard()
+    )
+
+
+# Handler for 'Пресет' button
+@dp.callback_query_handler(lambda c: c.data == 'toggle_list')
+async def toggle_list(callback_query: types.CallbackQuery):
+    # Get current choice
+    chat_id = callback_query.message.chat.id
+    user_choice = user_choices.setdefault(chat_id, {})
+    preset = user_choice.get('preset', 'Классика')
+    # Toggle preset
+    preset = 'Расширенный' if preset == 'Классика' else 'Классика'
+    user_choice['preset'] = preset
+    # Update message and keyboard
+    await bot.edit_message_text(
+        generate_current_settings_message(chat_id),
+        chat_id,
+        callback_query.message.message_id,
+        reply_markup=character_creation_keyboard())
+
+
+# Handler for 'Создать' button
+@dp.callback_query_handler(lambda c: c.data == 'generate')
+async def generate(callback_query: types.CallbackQuery):
+    chat_id = callback_query.message.chat.id
+    user_choice = user_choices.get(chat_id, {})
+    # Get choices
+    preset = user_choice.get('preset', 'Классика')
+    char_class = user_choice.get('char_class', 'Случайно')
+    race = user_choice.get('race', 'Случайно')
+    story = user_choice.get('story', 'Случайно')
+    num_chars = user_choice.get('num_chars', 3)
+    # Generate characters
+    characters = '\n---\n'.join(make_character(char_class, race, story, preset == 'Классика') for _ in range(num_chars))
+    # Send characters
+    await bot.send_message(chat_id, characters)
+
+
 if __name__ == '__main__':
     from aiogram import executor
     executor.start_polling(dp, skip_updates=True)
