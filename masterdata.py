@@ -1,4 +1,3 @@
-
 RACE_LINK = 'https://dnd.su/race/'
 CLASS_LINK = 'https://dnd.su/class/'
 STORY_LINK = 'https://dnd.su/backgrounds/'
@@ -169,6 +168,19 @@ STORIES = {
     'Антрополог': '756-anthropologist',
     'Археолог': '791-archaeologist',
 }
+
+CLASSIC_ITEMS = {
+    'char_class': CLASSIC_CLASSES,
+    'char_race': CLASSIC_RACES,
+    'char_story': CLASSIC_STORIES,
+}
+
+EXTENDED_ITEMS = {
+    'char_class': CLASSES,
+    'char_race': RACES,
+    'char_story': STORIES,
+}
+
 # for story, link in STORIES.items():
 #     print(f"'{story[:23]}': '{link}',")
 # STORIES = {

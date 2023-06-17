@@ -3,10 +3,12 @@ import sqlite3
 import logging
 import re
 from aiogram import Bot, Dispatcher, types
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from func import roll_dice, dx_roll, make_character
 from config import TOKEN
 from keyboard import character_creation_keyboard
+from masterdata import CLASSIC_CLASSES, CLASSES, RACES, CLASSIC_RACES, CLASSIC_STORIES, STORIES
 
 conn = sqlite3.connect('dnd_bot.db')  # Creates a new db file if it doesn't exist
 c = conn.cursor()
@@ -31,22 +33,24 @@ async def send_welcome(message: types.Message):
     welcome_message = (
         "Привет! Я бот, который может помочь в ваших DnD приключениях, бросая кости за вас. "
         "Просто отправьте сообщение в формате '/NdM+K', где N - количество кубиков, "
-        "M - количество граней на кубике, K - модификатор (необязательно). Например, /2d20+5'. "
+        "M - количество граней на кубике, K - модификатор (необязательно). Например, '/2d20+5'. "
         "Я вычислю результат для вас!\n\n"
         "Вы также можете использовать команду /roll N, где N - это количество сторон на кубике "
         "(по умолчанию 20, если N не указано). "
-        "Это простой способ быстро бросить один кубик. Например, /roll 100 бросит 100-гранный кубик за вас.\n\n"
+        "Это простой способ быстро бросить один кубик. Например, '/roll 100' бросит 100-гранный кубик за вас.\n\n"
         "Вы также можете установить информацию о следующей игре с помощью команды /set, "
         "а потом получить ее обратно с помощью команды /game.\n\n"
-        "Если вы хотите найти описание заклинания, просто используйте команду /spell Название заклинания.\n"
-        "Для поиска по справочнику классов, используйте команду /class Название навыка.\n\n"
+        "Если вы хотите найти описание заклинания, просто используйте команду /spell 'Название заклинания'. "
+        "Для поиска по справочнику классов, используйте команду /class 'Название класса'.\n\n"
+        "Теперь есть новая возможность! Используйте команду /create\\_character для создания случайных персонажей. "
+        "Вы можете выбирать класс, расу, предысторию и количество персонажей.\n\n"
         "Вот список сайтов, которые могут помочь:\n"
-        "[DnD.su. Справочник по заклинаниям](https://dnd.su/spells/)\n"  
-        "[DnD.su. Справочник по классам](https://dnd.su/class/)\n"
-        "[DnD.su. Справочник по расам](https://dnd.su/race/)\n\n"
-        "[Интерактивный чарлист](https://longstoryshort.app/characters/list/)\n\n"
+        "[DnD.su. Справочник по заклинаниям](https://dnd.su/spells)\n"  
+        "[DnD.su. Справочник по классам](https://dnd.su/class)\n"
+        "[DnD.su. Справочник по расам](https://dnd.su/race)\n\n"
+        "[Интерактивный чарлист](https://longstoryshort.app/characters/list)\n\n"
         "[Правила для начинающих игроков](https://www.dungeonsanddragons.ru/bookfull/5ed/5e%20starter%20set%20-%20basic%20rules%20RUS.pdf)\n"
-        "[Миниатюры персонажей Hero Forge](https://www.heroforge.com/)\n"
+        "[Миниатюры персонажей Hero Forge](https://www.heroforge.com)\n"
     )
 
     await message.reply(welcome_message, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
@@ -149,16 +153,16 @@ def generate_current_settings_message(chat_id):
     user_choice = user_choices.get(chat_id, {})
     preset = user_choice.get('preset', 'Классика')
     char_class = user_choice.get('char_class', 'Случайно')
-    race = user_choice.get('race', 'Случайно')
-    story = user_choice.get('story', 'Случайно')
+    char_race = user_choice.get('char_race', 'Случайно')
+    char_story = user_choice.get('char_story', 'Случайно')
     num_chars = user_choice.get('num_chars', 3)
 
     return (
         f"Время создать персонажа! Текущие параметры:\n"
         f"Пресет: {preset}\n"
         f"Класс: {char_class}\n"
-        f"Раса: {race}\n"
-        f"Предыстория: {story}\n"
+        f"Раса: {char_race}\n"
+        f"Предыстория: {char_story}\n"
         f"Количество персонажей: {num_chars}\n"
     )
 
@@ -198,6 +202,161 @@ async def toggle_list(callback_query: types.CallbackQuery):
         reply_markup=character_creation_keyboard())
 
 
+# Handler for 'Класс' button
+@dp.callback_query_handler(lambda c: c.data == 'select_class')
+async def select_class(callback_query: types.CallbackQuery):
+    chat_id = callback_query.message.chat.id
+    user_choice = user_choices.setdefault(chat_id, {})
+    preset = user_choice.get('preset', 'Классика')
+    classes = CLASSIC_CLASSES if preset == 'Классика' else CLASSES
+    keyboard = InlineKeyboardMarkup(row_width=3)
+    for class_name in classes:
+        button = InlineKeyboardButton(class_name, callback_data=f'selected_class_{class_name}')
+        keyboard.insert(button)
+
+    await bot.edit_message_text(
+        'Выберите класс:',
+        chat_id,
+        callback_query.message.message_id,
+        reply_markup=keyboard
+    )
+
+
+# Handler for when a class is selected
+@dp.callback_query_handler(lambda c: c.data.startswith('selected_class_'))
+async def selected_class(callback_query: types.CallbackQuery):
+    chat_id = callback_query.message.chat.id
+    user_choice = user_choices.setdefault(chat_id, {})
+    class_name = callback_query.data[len('selected_class_'):]
+
+    # Update user choice
+    user_choice['char_class'] = class_name
+
+    # Update message and keyboard
+    await bot.edit_message_text(
+        generate_current_settings_message(chat_id),
+        chat_id,
+        callback_query.message.message_id,
+        reply_markup=character_creation_keyboard()
+    )
+
+
+# Handler for 'раса' button
+@dp.callback_query_handler(lambda c: c.data == 'select_race')
+async def select_race(callback_query: types.CallbackQuery):
+    chat_id = callback_query.message.chat.id
+    user_choice = user_choices.setdefault(chat_id, {})
+    preset = user_choice.get('preset', 'Классика')
+    races = CLASSIC_RACES if preset == 'Классика' else RACES
+    keyboard = InlineKeyboardMarkup(row_width=3)
+    for race_name in races:
+        button = InlineKeyboardButton(race_name, callback_data=f'selected_race_{race_name}')
+        keyboard.insert(button)
+
+    await bot.edit_message_text(
+        'Выберите расу:',
+        chat_id,
+        callback_query.message.message_id,
+        reply_markup=keyboard
+    )
+
+
+# Handler for when a race is selected
+@dp.callback_query_handler(lambda c: c.data and c.data.startswith('selected_race_'))
+async def select_race_choice(callback_query: types.CallbackQuery):
+    chat_id = callback_query.message.chat.id
+    user_choice = user_choices.setdefault(chat_id, {})
+    race_name = callback_query.data[len('selected_race_'):]
+
+    # Update user choice
+    user_choice['char_race'] = race_name
+
+    # Update message and keyboard
+    await bot.edit_message_text(
+        generate_current_settings_message(chat_id),
+        chat_id,
+        callback_query.message.message_id,
+        reply_markup=character_creation_keyboard()
+    )
+
+
+# Handler for 'История' button
+@dp.callback_query_handler(lambda c: c.data == 'select_story')
+async def select_story(callback_query: types.CallbackQuery):
+    chat_id = callback_query.message.chat.id
+    user_choice = user_choices.setdefault(chat_id, {})
+    preset = user_choice.get('preset', 'Классика')
+    stories = CLASSIC_STORIES if preset == 'Классика' else STORIES
+    keyboard = InlineKeyboardMarkup(row_width=3)
+    for story_name in stories:
+        button = InlineKeyboardButton(story_name, callback_data=f'selected_story_{story_name}')
+        keyboard.insert(button)
+
+    await bot.edit_message_text(
+        'Выберите предысторию:',
+        chat_id,
+        callback_query.message.message_id,
+        reply_markup=keyboard
+    )
+
+
+# Handler for when a story is selected
+@dp.callback_query_handler(lambda c: c.data and c.data.startswith('selected_story_'))
+async def select_story_choice(callback_query: types.CallbackQuery):
+    chat_id = callback_query.message.chat.id
+    user_choice = user_choices.setdefault(chat_id, {})
+    story_name = callback_query.data[len('selected_story_'):]
+
+    # Update user choice
+    user_choice['char_story'] = story_name
+
+    # Update message and keyboard
+    await bot.edit_message_text(
+        generate_current_settings_message(chat_id),
+        chat_id,
+        callback_query.message.message_id,
+        reply_markup=character_creation_keyboard()
+    )
+
+
+# Handler for 'Количество персонажей' button
+@dp.callback_query_handler(lambda c: c.data == 'select_num_chars')
+async def select_num_chars(callback_query: types.CallbackQuery):
+    chat_id = callback_query.message.chat.id
+
+    # Create keyboard for selecting number of characters
+    keyboard = InlineKeyboardMarkup(row_width=5)
+    for i in range(1, 11):
+        button = InlineKeyboardButton(str(i), callback_data=f'selected_num_chars_{i}')
+        keyboard.insert(button)
+
+    await bot.edit_message_text(
+        'Выберите количество персонажей:',
+        chat_id,
+        callback_query.message.message_id,
+        reply_markup=keyboard
+    )
+
+
+# Handler for when a number of characters is selected
+@dp.callback_query_handler(lambda c: c.data.startswith('selected_num_chars_'))
+async def selected_num_chars(callback_query: types.CallbackQuery):
+    chat_id = callback_query.message.chat.id
+    user_choice = user_choices.setdefault(chat_id, {})
+    num_chars = int(callback_query.data[len('selected_num_chars_'):])
+
+    # Update user choice
+    user_choice['num_chars'] = num_chars
+
+    # Update message and keyboard
+    await bot.edit_message_text(
+        generate_current_settings_message(chat_id),
+        chat_id,
+        callback_query.message.message_id,
+        reply_markup=character_creation_keyboard()
+    )
+
+
 # Handler for 'Создать' button
 @dp.callback_query_handler(lambda c: c.data == 'generate')
 async def generate(callback_query: types.CallbackQuery):
@@ -206,13 +365,13 @@ async def generate(callback_query: types.CallbackQuery):
     # Get choices
     preset = user_choice.get('preset', 'Классика')
     char_class = user_choice.get('char_class', 'Случайно')
-    race = user_choice.get('race', 'Случайно')
-    story = user_choice.get('story', 'Случайно')
+    race = user_choice.get('char_race', 'Случайно')
+    story = user_choice.get('char_story', 'Случайно')
     num_chars = user_choice.get('num_chars', 3)
     # Generate characters
     characters = '\n---\n'.join(make_character(char_class, race, story, preset == 'Классика') for _ in range(num_chars))
     # Send characters
-    await bot.send_message(chat_id, characters)
+    await bot.send_message(chat_id, characters, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
 
 
 # main handler for expressions
@@ -226,4 +385,4 @@ async def dice_roll(message: types.Message):
 
 if __name__ == '__main__':
     from aiogram import executor
-    executor.start_polling(dp, skip_updates=True)
+    executor.start_polling(dp, skip_updates=False)

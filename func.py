@@ -1,7 +1,8 @@
 import re
 import random
-from masterdata import CLASSES, CLASSIC_CLASSES, RACES, CLASSIC_RACES, STORIES
-from masterdata import CLASSIC_STORIES, CLASS_LINK, RACE_LINK, STORY_LINK
+
+from masterdata import CLASSIC_ITEMS, EXTENDED_ITEMS, CLASS_LINK, RACE_LINK, STORY_LINK, CLASSES, CLASSIC_CLASSES, \
+    RACES, CLASSIC_RACES, STORIES, CLASSIC_STORIES
 
 
 def roll_dice(expression):
@@ -76,8 +77,3 @@ def make_character(char_class='', char_race='', char_story='', classic=False) ->
         f"[{char_race}]({race_link})\n"
         f"[{char_story}]({story_link})\n"
     )
-
-
-# for i in range(5):
-#     print(make_character(classic=False))
-#     print('---')
