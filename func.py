@@ -28,7 +28,7 @@ def roll_dice(expression) -> str:
     return f'{"+".join(rolls)} = {total}' if len(rolls) > 1 else f'{total}'
 
 
-def dx_roll(sides=20):
+def dx_roll(sides=20) -> tuple:
     if sides > 100000:
         sides = 20
     roll = random.randint(1, sides)
