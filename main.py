@@ -4,6 +4,8 @@ import logging
 import re
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.utils.exceptions import MessageNotModified
+
 
 from func import roll_dice, dx_roll, make_character
 from config import TOKEN
@@ -167,22 +169,42 @@ def generate_current_settings_message(chat_id):
     )
 
 
+
+def reset_user_settings(chat_id):
+    user_choices[chat_id] = {
+        "preset": "Классика",
+        "char_class": "Случайно",
+        "char_race": "Случайно",
+        "char_story": "Случайно",
+        "num_chars": 3
+    }
+
 @dp.message_handler(commands=['create_character'])
 async def create_character(message: types.Message):
-    answer = (
-        "Время создать персонажа! Текущие параметры:\n"
-        "Пресет: Классика\n"
-        "Класс: Случайный\n"
-        "Раса: Случайно\n"
-        "Предыстория: Случайно\n"
-        "Количество персонажей: 3\n"
-    )
+    reset_user_settings(message.chat.id)
+    answer = generate_current_settings_message(message.chat.id)
     await bot.send_message(
         message.chat.id,
         answer,
         reply_markup=character_creation_keyboard()
     )
 
+
+# add the reset functionality to the callback handler for 'reset_char' button
+@dp.callback_query_handler(lambda c: c.data == 'reset_char')
+async def reset_char_settings(callback_query: types.CallbackQuery):
+    reset_user_settings(callback_query.from_user.id)  # Reset user settings
+    answer = generate_current_settings_message(callback_query.from_user.id)  # Generate settings message after reset
+    await bot.answer_callback_query(callback_query.id)
+    try:
+        await bot.edit_message_text(
+            chat_id=callback_query.message.chat.id,
+            message_id=callback_query.message.message_id,
+            text=answer,
+            reply_markup=character_creation_keyboard()
+        )
+    except MessageNotModified:
+        pass
 
 # Handler for 'Пресет' button
 @dp.callback_query_handler(lambda c: c.data == 'toggle_list')

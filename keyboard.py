@@ -9,6 +9,7 @@ def character_creation_keyboard():
         InlineKeyboardButton('Раса', callback_data='select_race'),
         InlineKeyboardButton('Предыстория', callback_data='select_story'),
         InlineKeyboardButton('Количество', callback_data='select_num_chars'),
+        InlineKeyboardButton('Сбросить', callback_data='reset_char'),
         InlineKeyboardButton('Создать', callback_data='generate'),
     )
     return keyboard
