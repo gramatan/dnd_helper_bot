@@ -4,6 +4,7 @@ from db.db import create_if_not_exist
 # Import handlers
 # "roll" should be the last one,
 # because it has a catch-all handler
+from handlers import create_char, guide, next_game, start, roll
 
 create_if_not_exist()
 
