@@ -45,41 +45,6 @@ def dx_roll(sides=20) -> tuple:
     return roll, sides
 
 
-# def make_character(char_class='', char_race='', char_story='', classic=False) -> str:
-#     if not char_class or char_class not in CLASSES:
-#         if not classic:
-#             char_class, class_link = random.choice(list(CLASSES.items()))
-#         else:
-#             char_class, class_link = random.choice(list(CLASSIC_CLASSES.items()))
-#     else:
-#         class_link = CLASSES[char_class]
-#
-#     if not char_race or char_race not in RACES:
-#         if not classic:
-#             char_race, race_link = random.choice(list(RACES.items()))
-#         else:
-#             char_race, race_link = random.choice(list(CLASSIC_RACES.items()))
-#     else:
-#         race_link = RACES[char_race]
-#     if not char_story or char_story not in STORIES:
-#         if not classic:
-#             char_story, story_link = random.choice(list(STORIES.items()))
-#         else:
-#             char_story, story_link = random.choice(list(CLASSIC_STORIES.items()))
-#     else:
-#         story_link = STORIES[char_story]
-#
-#     class_link = CLASS_LINK + class_link + '/'
-#     race_link = RACE_LINK + race_link + '/'
-#     story_link = STORY_LINK + story_link + '/'
-#
-#     return (
-#         f"[{char_class}]({class_link})\n"
-#         f"[{char_race}]({race_link})\n"
-#         f"[{char_story}]({story_link})\n"
-#     )
-
-
 def select_item(choices, user_choice):
     # Check if user choice exists and is valid
     if user_choice and user_choice in choices:

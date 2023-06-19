@@ -10,18 +10,10 @@ from aiogram.utils.exceptions import MessageNotModified
 from func import roll_dice, dx_roll, make_character
 from config import TOKEN
 from keyboard import character_creation_keyboard
-from masterdata import CLASSIC_CLASSES, CLASSES, RACES, CLASSIC_RACES, CLASSIC_STORIES, STORIES
+from masterdata import CLASSIC_CLASSES, CLASSES, RACES, CLASSIC_RACES, CLASSIC_STORIES, STORIES, WELCOME_MESSAGE
+from db import create_if_not_exist
 
-conn = sqlite3.connect('dnd_bot.db')  # Creates a new db file if it doesn't exist
-c = conn.cursor()
-
-# Create table
-c.execute('''CREATE TABLE IF NOT EXISTS games
-             (chat_id INTEGER PRIMARY KEY, game_info TEXT)''')
-
-conn.commit()
-conn.close()
-
+create_if_not_exist()
 API_TOKEN = TOKEN   # your telegram bot token
 
 # Initialize bot and dispatcher
@@ -32,29 +24,7 @@ dp = Dispatcher(bot)
 
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
-    welcome_message = (
-        "Привет! Я бот, который может помочь в ваших DnD приключениях, бросая кости за вас. "
-        "Просто отправьте сообщение в формате '/NdM+K', где N - количество кубиков, "
-        "M - количество граней на кубике, K - модификатор (необязательно). Например, '/2d20+5'. "
-        "Я вычислю результат для вас!\n\n"
-        "Вы также можете использовать команду /roll N, где N - это количество сторон на кубике "
-        "(по умолчанию 20, если N не указано). "
-        "Это простой способ быстро бросить один кубик. Например, '/roll 100' бросит 100-гранный кубик за вас.\n\n"
-        "Вы также можете установить информацию о следующей игре с помощью команды /set, "
-        "а потом получить ее обратно с помощью команды /game.\n\n"
-        "Если вы хотите найти описание заклинания, просто используйте команду /spell 'Название заклинания'. "
-        "Для поиска по справочнику классов, используйте команду /class 'Название класса'.\n\n"
-        "Теперь есть новая возможность! Используйте команду /create\\_character для создания случайных персонажей. "
-        "Вы можете выбирать класс, расу, предысторию и количество персонажей.\n\n"
-        "Вот список сайтов, которые могут помочь:\n"
-        "[DnD.su. Справочник по заклинаниям](https://dnd.su/spells)\n"  
-        "[DnD.su. Справочник по классам](https://dnd.su/class)\n"
-        "[DnD.su. Справочник по расам](https://dnd.su/race)\n\n"
-        "[Интерактивный чарлист](https://longstoryshort.app/characters/list)\n\n"
-        "[Правила для начинающих игроков](https://www.dungeonsanddragons.ru/bookfull/5ed/5e%20starter%20set%20-%20basic%20rules%20RUS.pdf)\n"
-        "[Миниатюры персонажей Hero Forge](https://www.heroforge.com)\n"
-    )
-
+    welcome_message = WELCOME_MESSAGE
     await message.reply(welcome_message, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
 
 
@@ -169,7 +139,6 @@ def generate_current_settings_message(chat_id):
     )
 
 
-
 def reset_user_settings(chat_id):
     user_choices[chat_id] = {
         "preset": "Классика",
@@ -178,6 +147,7 @@ def reset_user_settings(chat_id):
         "char_story": "Случайно",
         "num_chars": 3
     }
+
 
 @dp.message_handler(commands=['create_character'])
 async def create_character(message: types.Message):
@@ -205,6 +175,7 @@ async def reset_char_settings(callback_query: types.CallbackQuery):
         )
     except MessageNotModified:
         pass
+
 
 # Handler for 'Пресет' button
 @dp.callback_query_handler(lambda c: c.data == 'toggle_list')
