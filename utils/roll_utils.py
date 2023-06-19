@@ -43,30 +43,3 @@ def dx_roll(sides=20) -> tuple:
         sides = 20
     roll = random.randint(1, sides)
     return roll, sides
-
-
-def select_item(choices, user_choice):
-    # Check if user choice exists and is valid
-    if user_choice and user_choice in choices:
-        item_link = choices[user_choice]
-    else:
-        user_choice, item_link = random.choice(list(choices.items()))
-    return user_choice, item_link
-
-
-def make_character(char_class='', char_race='', char_story='', classic=False) -> str:
-    items = CLASSIC_ITEMS if classic else EXTENDED_ITEMS
-
-    char_class, class_link = select_item(items['char_class'], char_class)
-    char_race, race_link = select_item(items['char_race'], char_race)
-    char_story, story_link = select_item(items['char_story'], char_story)
-
-    class_link = CLASS_LINK + class_link + '/'
-    race_link = RACE_LINK + race_link + '/'
-    story_link = STORY_LINK + story_link + '/'
-
-    return (
-        f"[{char_class}]({class_link})\n"
-        f"[{char_race}]({race_link})\n"
-        f"[{char_story}]({story_link})\n"
-    )
