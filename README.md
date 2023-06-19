@@ -3,6 +3,7 @@
 DnD Helper is a Telegram bot designed to assist with your Dungeons & Dragons gaming sessions. It can roll dice for you, set and recall game information, and provide spell information.
 Features
 
+* Random character creation tool. Use /create_character setup it with buttons and press generate.
 * Dice rolling: The bot can roll dice with a specified number of sides. Use the command /roll N, where N is the number of sides on the dice (default 20).
 * Advanced dice rolling: Use the format /NdM+K, where N is the number of dice, M is the number of sides per dice, and K is an optional modifier.
 * Game information: Use /set followed by your text to save information about your next game. Use /game to retrieve this information.
