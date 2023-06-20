@@ -1,6 +1,7 @@
 import random
 
 from utils.masterdata import CLASSIC_ITEMS, EXTENDED_ITEMS, CLASS_LINK, RACE_LINK, STORY_LINK
+from utils.roll_utils import dx_roll
 
 user_choices = {}  # global variable to store current user choices for character creation
 
@@ -58,3 +59,36 @@ def reset_user_settings(chat_id):
         "char_story": "Случайно",
         "num_chars": 3
     }
+
+
+class Character:
+    def __init__(self):
+        self._attributes = {
+            'strength': 0,
+            'dexterity': 0,
+            'constitution': 0,
+            'intellect': 0,
+            'wisdom': 0,
+            'charisma': 0,
+            }
+
+    def random_fill(self):
+        for attr in self._attributes.keys():
+            variants = [dx_roll(6)[0], dx_roll(6)[0], dx_roll(6)[0], dx_roll(6)[0]]
+            variants.sort(reverse=True)
+            self._attributes[attr] = sum(variants[:3])
+
+    def get_values(self) -> list[tuple[list, int]]:
+        answer = []
+        for _ in range(6):
+            variants = [dx_roll(6)[0], dx_roll(6)[0], dx_roll(6)[0], dx_roll(6)[0]]
+            variants.sort(reverse=True)
+            answer.append((variants, sum(variants[:3])))
+        return answer
+
+    def set_att(self, att, val):
+        if att in self._attributes:
+            self._attributes[att] = val
+
+    def get_att(self):
+        return self._attributes
