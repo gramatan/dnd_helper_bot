@@ -10,7 +10,6 @@ from utils.character_creation_utils import reset_user_settings, generate_current
     make_character
 
 
-@dp.message_handler(commands=['create_character'])
 async def create_character(message: types.Message):
     reset_user_settings(message.chat.id)
     answer = generate_current_settings_message(message.chat.id)
@@ -22,7 +21,6 @@ async def create_character(message: types.Message):
 
 
 # add the reset functionality to the callback handler for 'reset_char' button
-@dp.callback_query_handler(lambda c: c.data == 'reset_char')
 async def reset_char_settings(callback_query: types.CallbackQuery):
     reset_user_settings(callback_query.from_user.id)  # Reset user settings
     answer = generate_current_settings_message(callback_query.from_user.id)  # Generate settings message after reset
@@ -39,7 +37,6 @@ async def reset_char_settings(callback_query: types.CallbackQuery):
 
 
 # Handler for 'Пресет' button
-@dp.callback_query_handler(lambda c: c.data == 'toggle_list')
 async def toggle_list(callback_query: types.CallbackQuery):
     # Get current choice
     chat_id = callback_query.message.chat.id
@@ -57,7 +54,6 @@ async def toggle_list(callback_query: types.CallbackQuery):
 
 
 # Handler for 'Класс' button
-@dp.callback_query_handler(lambda c: c.data == 'select_class')
 async def select_class(callback_query: types.CallbackQuery):
     chat_id = callback_query.message.chat.id
     user_choice = user_choices.setdefault(chat_id, {})
@@ -77,7 +73,6 @@ async def select_class(callback_query: types.CallbackQuery):
 
 
 # Handler for when a class is selected
-@dp.callback_query_handler(lambda c: c.data.startswith('selected_class_'))
 async def selected_class(callback_query: types.CallbackQuery):
     chat_id = callback_query.message.chat.id
     user_choice = user_choices.setdefault(chat_id, {})
@@ -96,7 +91,6 @@ async def selected_class(callback_query: types.CallbackQuery):
 
 
 # Handler for 'раса' button
-@dp.callback_query_handler(lambda c: c.data == 'select_race')
 async def select_race(callback_query: types.CallbackQuery):
     chat_id = callback_query.message.chat.id
     user_choice = user_choices.setdefault(chat_id, {})
@@ -116,7 +110,6 @@ async def select_race(callback_query: types.CallbackQuery):
 
 
 # Handler for when a race is selected
-@dp.callback_query_handler(lambda c: c.data and c.data.startswith('selected_race_'))
 async def select_race_choice(callback_query: types.CallbackQuery):
     chat_id = callback_query.message.chat.id
     user_choice = user_choices.setdefault(chat_id, {})
@@ -135,7 +128,6 @@ async def select_race_choice(callback_query: types.CallbackQuery):
 
 
 # Handler for 'История' button
-@dp.callback_query_handler(lambda c: c.data == 'select_story')
 async def select_story(callback_query: types.CallbackQuery):
     chat_id = callback_query.message.chat.id
     user_choice = user_choices.setdefault(chat_id, {})
@@ -155,7 +147,6 @@ async def select_story(callback_query: types.CallbackQuery):
 
 
 # Handler for when a story is selected
-@dp.callback_query_handler(lambda c: c.data and c.data.startswith('selected_story_'))
 async def select_story_choice(callback_query: types.CallbackQuery):
     chat_id = callback_query.message.chat.id
     user_choice = user_choices.setdefault(chat_id, {})
@@ -174,7 +165,6 @@ async def select_story_choice(callback_query: types.CallbackQuery):
 
 
 # Handler for 'Количество персонажей' button
-@dp.callback_query_handler(lambda c: c.data == 'select_num_chars')
 async def select_num_chars(callback_query: types.CallbackQuery):
     chat_id = callback_query.message.chat.id
 
@@ -193,7 +183,6 @@ async def select_num_chars(callback_query: types.CallbackQuery):
 
 
 # Handler for when a number of characters is selected
-@dp.callback_query_handler(lambda c: c.data.startswith('selected_num_chars_'))
 async def selected_num_chars(callback_query: types.CallbackQuery):
     chat_id = callback_query.message.chat.id
     user_choice = user_choices.setdefault(chat_id, {})
@@ -212,7 +201,6 @@ async def selected_num_chars(callback_query: types.CallbackQuery):
 
 
 # Handler for 'Создать' button
-@dp.callback_query_handler(lambda c: c.data == 'generate')
 async def generate(callback_query: types.CallbackQuery):
     chat_id = callback_query.message.chat.id
     user_choice = user_choices.get(chat_id, {})

@@ -7,7 +7,6 @@ from bot import dp
 from utils.roll_utils import dx_roll, roll_dice
 
 
-@dp.message_handler(commands=['roll'])
 async def roll_dice_command(message: types.Message):
     try:
         dice = int(message.text[6:])
@@ -22,7 +21,6 @@ async def roll_dice_command(message: types.Message):
 
 
 # main handler for expressions
-@dp.message_handler()
 async def dice_roll(message: types.Message):
     requests = re.findall(r'/([+-]?\d*[dD]\d+[+-]?\d*|[dD])', message.text, re.IGNORECASE)
     if requests:

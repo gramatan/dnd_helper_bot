@@ -26,7 +26,6 @@ WELCOME = (
     )
 
 
-@dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
     welcome_message = WELCOME
     await message.reply(welcome_message, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
