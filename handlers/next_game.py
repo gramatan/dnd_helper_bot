@@ -5,7 +5,6 @@ from aiogram import types
 from bot import dp
 
 
-@dp.message_handler(commands=['set'])
 async def set_game(message: types.Message):
     chat_id = message.chat.id
     game_info = message.text[5:]  # Removes the '/set ' part
@@ -23,7 +22,6 @@ async def set_game(message: types.Message):
     await message.reply("Информация о следующей партии сохранена")
 
 
-@dp.message_handler(commands=['game'])
 async def get_game(message: types.Message):
     chat_id = message.chat.id
 
