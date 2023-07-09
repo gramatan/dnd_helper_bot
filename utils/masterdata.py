@@ -2,6 +2,7 @@ import json
 
 from dataclasses import dataclass
 
+
 @dataclass
 class SpellCard:
     title: str
@@ -20,8 +21,8 @@ class SpellCard:
     description: str = None
 
 
-def load_spells():
-    with open('spells.json', 'r', encoding='utf-8') as f:
+def load_spells(path: str = 'spells.json'):
+    with open(path, 'r', encoding='utf-8') as f:
         data = json.load(f)
 
     spell_cards = {k: SpellCard(**v) for k, v in data.items()}
