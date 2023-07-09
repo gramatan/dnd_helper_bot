@@ -27,6 +27,7 @@ def load_spells():
     spell_cards = {k: SpellCard(**v) for k, v in data.items()}
     return spell_cards
 
+
 RACE_LINK = 'https://dnd.su/race/'
 CLASS_LINK = 'https://dnd.su/class/'
 STORY_LINK = 'https://dnd.su/backgrounds/'
