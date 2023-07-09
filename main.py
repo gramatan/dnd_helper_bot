@@ -4,8 +4,10 @@ from bot import dp
 from db.db import create_if_not_exist
 
 from handlers import create_char, guide, next_game, start, roll
+from utils.masterdata import load_spells
 
 create_if_not_exist()
+spell_cards = load_spells()
 
 
 def register_handlers(dp):
