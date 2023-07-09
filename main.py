@@ -7,7 +7,7 @@ from handlers import create_char, guide, next_game, start, roll
 from utils.masterdata import load_spells
 
 create_if_not_exist()
-spell_cards = load_spells()
+spell_cards = load_spells('utils/spells.json')
 
 
 def register_handlers(dp):
