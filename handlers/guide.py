@@ -75,7 +75,7 @@ async def bestiary_search(message: types.Message):
             "/bestiary Вегепигмеи "
             )
     else:
-        spell = message.text[7:]    # remove '/class ' part
+        spell = message.text[10:]    # remove '/bestiary ' part
         answer = (
             f"{user}, то что ты ищешь находится здесь:\n"
             f"[{spell}](https://dnd.su/articles/bestiary/?search={spell})"
@@ -93,7 +93,7 @@ async def item_search(message: types.Message):
             "/item посох защиты "
             )
     else:
-        spell = message.text[7:]    # remove '/class ' part
+        spell = message.text[6:]    # remove '/item ' part
         answer = (
             f"{user}, то что ты ищешь находится здесь:\n"
             f"[{spell}](https://dnd.su/items/?search={spell})"
@@ -112,7 +112,7 @@ async def mech_search(message: types.Message):
             "/mech языки"
             )
     else:
-        spell = message.text[7:]    # remove '/class ' part
+        spell = message.text[6:]    # remove '/mech ' part
         answer = (
             f"{user}, то что ты ищешь находится здесь:\n"
             f"[{spell}](https://dnd.su/mechanics/?search={spell})"
