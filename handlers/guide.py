@@ -3,7 +3,7 @@ from aiogram import types
 from bot import dp
 
 
-async def class_list(message: types.Message):
+async def class_search(message: types.Message):
     user = message.from_user.first_name
     if len(message.text) < 8:
         await message.reply(
@@ -62,4 +62,59 @@ async def spell_search(message: types.Message):
                 f"[{spell}](https://dnd.su/spells/?search={spell})"
             )
 
+        await message.reply(answer, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
+
+
+async def bestiary_search(message: types.Message):
+    user = message.from_user.first_name
+    if len(message.text) < 8:
+        await message.reply(
+            f"{user}, никак ты не научишься, необходимо ввести слова для поиска после /bestiary\n"
+            "например:\n"
+            "/bestiary Багбиры\n"
+            "/bestiary Вегепигмеи "
+            )
+    else:
+        spell = message.text[10:]    # remove '/bestiary ' part
+        answer = (
+            f"{user}, то что ты ищешь находится здесь:\n"
+            f"[{spell}](https://dnd.su/articles/bestiary/?search={spell})"
+        )
+        await message.reply(answer, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
+
+
+async def item_search(message: types.Message):
+    user = message.from_user.first_name
+    if len(message.text) < 8:
+        await message.reply(
+            f"{user}, это поиск вещей, необходимо ввести слова для поиска после /item\n"
+            "например:\n"
+            "/item жемчужина силы\n"
+            "/item посох защиты "
+            )
+    else:
+        spell = message.text[6:]    # remove '/item ' part
+        answer = (
+            f"{user}, то что ты ищешь находится здесь:\n"
+            f"[{spell}](https://dnd.su/items/?search={spell})"
+        )
+        await message.reply(answer, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
+
+
+async def mech_search(message: types.Message):
+    user = message.from_user.first_name
+    if len(message.text) < 8:
+        await message.reply(
+            f"{user}, это поиск! чтобы что-то поискать, нужно что-то поискать.\n"
+            "необходимо ввести слова для поиска после /mech\n"
+            "например:\n"
+            "/mech безумие\n"
+            "/mech языки"
+            )
+    else:
+        spell = message.text[6:]    # remove '/mech ' part
+        answer = (
+            f"{user}, то что ты ищешь находится здесь:\n"
+            f"[{spell}](https://dnd.su/mechanics/?search={spell})"
+        )
         await message.reply(answer, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)

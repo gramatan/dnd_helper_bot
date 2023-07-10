@@ -14,9 +14,11 @@ def register_handlers(dp):
     dp.register_message_handler(start.send_welcome, commands=['start', 'help'])
     dp.register_message_handler(next_game.set_game, commands=['set'])
     dp.register_message_handler(next_game.get_game, commands=['game'])
-    dp.register_message_handler(guide.class_list, commands=['class'])
+    dp.register_message_handler(guide.class_search, commands=['class'])
     dp.register_message_handler(guide.spell_search, commands=['spell'])
-    dp.register_message_handler(create_char.create_character, commands=['create_character'])
+    dp.register_message_handler(guide.mech_search, commands=['mech'])
+    dp.register_message_handler(guide.item_search, commands=['item'])
+    dp.register_message_handler(guide.bestiary_search, commands=['bestiary'])
     dp.register_message_handler(create_char.create_character, commands=['create_character'])
 
     # create_char
