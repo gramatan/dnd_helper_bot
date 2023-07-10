@@ -1,3 +1,34 @@
+import json
+
+from dataclasses import dataclass
+
+
+@dataclass
+class SpellCard:
+    title: str
+    title_en: str
+    link: str
+    level: str
+    school: str
+    level_school: str = None
+    casting_time: str = None
+    c_range: str = None
+    components: str = None
+    duration: str = None
+    classes: str = None
+    archetypes: str = None
+    source: str = None
+    description: str = None
+
+
+def load_spells(path: str = 'spells.json'):
+    with open(path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    spell_cards = {k: SpellCard(**v) for k, v in data.items()}
+    return spell_cards
+
+
 RACE_LINK = 'https://dnd.su/race/'
 CLASS_LINK = 'https://dnd.su/class/'
 STORY_LINK = 'https://dnd.su/backgrounds/'

@@ -64,31 +64,40 @@ def reset_user_settings(chat_id):
 class Character:
     def __init__(self):
         self._attributes = {
-            'strength': 0,
-            'dexterity': 0,
-            'constitution': 0,
-            'intellect': 0,
-            'wisdom': 0,
-            'charisma': 0,
-            }
+            'Сила': 0,
+            'Ловкость': 0,
+            'Телосложение': 0,
+            'Интеллект': 0,
+            'Мудрость': 0,
+            'Харизма': 0,
+        }
+
+    @staticmethod
+    def _generate_attribute():
+        """Generate and return an attribute based on 4 d6 rolls."""
+        variants = [dx_roll(6)[0] for _ in range(4)]
+        variants.sort(reverse=True)
+        return variants, sum(variants[:3])
 
     def random_fill(self):
+        """Assign random attributes to the character."""
         for attr in self._attributes.keys():
-            variants = [dx_roll(6)[0], dx_roll(6)[0], dx_roll(6)[0], dx_roll(6)[0]]
-            variants.sort(reverse=True)
-            self._attributes[attr] = sum(variants[:3])
+            _, value = self._generate_attribute()
+            self._attributes[attr] = value
 
     def get_values(self) -> list[tuple[list, int]]:
-        answer = []
-        for _ in range(6):
-            variants = [dx_roll(6)[0], dx_roll(6)[0], dx_roll(6)[0], dx_roll(6)[0]]
-            variants.sort(reverse=True)
-            answer.append((variants, sum(variants[:3])))
-        return answer
+        """Return a list of generated attribute variants and their sums."""
+        return [self._generate_attribute() for _ in range(6)]
 
-    def set_att(self, att, val):
+    def set_att(self, att: str, val: int):
+        """Set an attribute with a specific value. Raise error if the attribute doesn't exist."""
         if att in self._attributes:
             self._attributes[att] = val
+        else:
+            raise ValueError(f"Характеристики {att} не существует.")
 
     def get_att(self):
+        """Return all attributes."""
         return self._attributes
+
+
