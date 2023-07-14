@@ -86,13 +86,19 @@ def main():
     fields = ['title', 'title_en', 'link', 'level', 'school']  # specify the keys you want
     spell_cards = [SpellCard(**{k: card[k] for k in fields}) for card in cards]
 
+    # Dictionary to store spell card details
+    spell_cards_dict = {}
+
     # Run through the collected links and fill in the details of the cards
     for card in tqdm(spell_cards, desc="Processing spell cards", unit="card"):
         card_url = url[:-8] + card.link
         card = get_spell_details(card, card_url)
 
+        card_title_lower = card.title.lower()
+        spell_cards_dict[card_title_lower] = asdict(card)
+
     with open('spells.json', 'w', encoding='utf-8') as f:
-        json.dump([asdict(card) for card in spell_cards], f, ensure_ascii=False, indent=4)
+        json.dump(spell_cards_dict, f, ensure_ascii=False, indent=4)
 
 
 # To run the script
