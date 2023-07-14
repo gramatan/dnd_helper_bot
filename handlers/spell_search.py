@@ -14,7 +14,7 @@ async def generate_spell_card_details(card):
 
     details_text = "\n".join([f"{key}: {value}" for key, value in details.items() if value is not None])
 
-    return f"**{card.title}** ({card.title_en})\n\n" \
+    return f"{card.title} [{card.title_en}]\n\n" \
            f"{card.level_school}\n" \
            f"{details_text}\n\n" \
            f"{card.description}\n\n" \
@@ -43,11 +43,14 @@ async def spell_search(message: types.Message):
 
         elif 1 < len(matches) < 9:
             inline_kb_full = InlineKeyboardMarkup(row_width=6)
-            buttons_list = [InlineKeyboardButton(str(i+1), callback_data=f"spell_{matches[i]}") for i in range(len(matches))]
+            buttons_list = [InlineKeyboardButton(str(i+1),
+                                                 callback_data=f"spell_{matches[i]}") for i in range(len(matches))]
             inline_kb_full.add(*buttons_list)
 
-            spells_text = '\n'.join([f"{i+1}. {spell_cards[spell].title} [{spell_cards[spell].title_en}]" for i, spell in enumerate(matches)])
-            await message.reply(f"В базе несколько заклинаний по вашему запросу:\n{spells_text}", reply_markup=inline_kb_full)
+            spells_text = '\n'.join([f"{i+1}. {spell_cards[spell].title}"
+                                     f" [{spell_cards[spell].title_en}]" for i, spell in enumerate(matches)])
+            await message.reply(f"В базе несколько заклинаний по вашему запросу:\n{spells_text}",
+                                reply_markup=inline_kb_full)
 
         else:
             answer = (
