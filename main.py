@@ -1,25 +1,33 @@
+import logging
+
 from aiogram import executor
 
 from bot import dp
 from db.db import create_if_not_exist
 
 from handlers import create_char, guide, next_game, start, roll, spell_search
+from handlers.spell_search import spell_callback_query
 from utils.masterdata import load_spells
 
 create_if_not_exist()
 spell_cards = load_spells('utils/spells.json')
 
+logger = logging.getLogger('logger')
+logger.setLevel(level=logging.DEBUG)
+# logger.setLevel(level=logging.INFO)
 
 def register_handlers(dp):
     dp.register_message_handler(start.send_welcome, commands=['start', 'help'])
     dp.register_message_handler(next_game.set_game, commands=['set'])
     dp.register_message_handler(next_game.get_game, commands=['game'])
     dp.register_message_handler(guide.class_search, commands=['class'])
-    dp.register_message_handler(spell_search.spell_search, commands=['spell'])
     dp.register_message_handler(guide.mech_search, commands=['mech'])
     dp.register_message_handler(guide.item_search, commands=['item'])
     dp.register_message_handler(guide.bestiary_search, commands=['bestiary'])
     dp.register_message_handler(create_char.create_character, commands=['create_character'])
+
+    dp.register_message_handler(spell_search.spell_search, commands=['spell'])
+    dp.register_callback_query_handler(spell_callback_query)
 
     # create_char
     dp.register_callback_query_handler(create_char.reset_char_settings, lambda c: c.data == 'reset_char')
@@ -38,7 +46,7 @@ def register_handlers(dp):
     dp.register_callback_query_handler(create_char.generate, lambda c: c.data == 'generate')
 
     dp.register_message_handler(roll.roll_dice_command, commands=['roll'])
-    dp.register_message_handler(roll.dice_roll) # should be the last one, because it has a catch-all handler
+    dp.register_message_handler(roll.dice_roll)  # should be the last one, because it has a catch-all handler
 
 
 if __name__ == '__main__':
