@@ -16,6 +16,7 @@ logger = logging.getLogger('logger')
 logger.setLevel(level=logging.DEBUG)
 # logger.setLevel(level=logging.INFO)
 
+
 def register_handlers(dp):
     dp.register_message_handler(start.send_welcome, commands=['start', 'help'])
     dp.register_message_handler(next_game.set_game, commands=['set'])
@@ -27,10 +28,9 @@ def register_handlers(dp):
     dp.register_message_handler(create_char.create_character, commands=['create_character'])
 
     dp.register_message_handler(spell_search.spell_search, commands=['spell'])
-    dp.register_callback_query_handler(spell_search.spell_callback_query)
-
+    dp.register_callback_query_handler(spell_search.spell_callback_query, lambda call: call.data.startswith('spell_'))
     dp.register_message_handler(feat_search.feat_search, commands=['feat'])
-    dp.register_callback_query_handler(feat_search.feat_callback_query)
+    dp.register_callback_query_handler(feat_search.feat_callback_query, lambda call: call.data.startswith('feat_'))
 
     # create_char
     dp.register_callback_query_handler(create_char.reset_char_settings, lambda c: c.data == 'reset_char')
