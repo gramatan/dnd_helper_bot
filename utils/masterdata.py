@@ -38,6 +38,8 @@ def load_spells(path: str = 'spells.json') -> dict:
 
         spell_cards = {k: SpellCard(**v) for k, v in data.items()}
     except FileNotFoundError:
+        from main import logger
+        logger.warning(f'Spells upload failed! File {path} not found')
         spell_cards = {}
     return spell_cards
 
@@ -49,6 +51,8 @@ def load_feats(path: str = 'feats.json') -> dict:
 
         feat_cards = {k: FeatCard(**v) for k, v in data.items()}
     except FileNotFoundError:
+        from main import logger
+        logger.warning(f'Feats upload failed! File {path} not found')
         feat_cards = {}
     return feat_cards
 
