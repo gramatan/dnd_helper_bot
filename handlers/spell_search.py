@@ -2,6 +2,25 @@ from aiogram import types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 
+async def generate_spell_card_details(card):
+    details = {
+        "Время накладывания": card.casting_time,
+        "Дистанция": card.c_range,
+        "Компоненты": card.components,
+        "Длительность": card.duration,
+        "Классы": card.classes,
+        "Архетипы": card.archetypes,
+    }
+
+    details_text = "\n".join([f"{key}: {value}" for key, value in details.items() if value is not None])
+
+    return f"**{card.title}** ({card.title_en})\n\n" \
+           f"{card.level_school}\n" \
+           f"{details_text}\n\n" \
+           f"{card.description}\n\n" \
+           f"[Ссылка на DnD.su](https://dnd.su{card.link})"
+
+
 async def spell_search(message: types.Message):
     from main import spell_cards, logger
     user = message.from_user.first_name
@@ -19,30 +38,15 @@ async def spell_search(message: types.Message):
         logger.debug(f"matches: {matches}")
         if len(matches) == 1:
             card = spell_cards[matches[0]]
-            details = {
-                "Время накладывания": card.casting_time,
-                "Дистанция": card.c_range,
-                "Компоненты": card.components,
-                "Длительность": card.duration,
-                "Классы": card.classes,
-                "Архетипы": card.archetypes,
-            }
-
-            details_text = "\n".join([f"{key}: {value}" for key, value in details.items() if value is not None])
-
-            answer = f"{card.title} [{card.title_en}]\n\n" \
-                     f"{card.level_school}\n" \
-                     f"{details_text}\n\n" \
-                     f"{card.description}\n\n" \
-                     f"[Ссылка на DnD.su](https://dnd.su{card.link})"
-
+            answer = await generate_spell_card_details(card)
             await message.reply(answer, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
+
         elif 1 < len(matches) < 9:
-            inline_kb_full = InlineKeyboardMarkup(row_width=2)
+            inline_kb_full = InlineKeyboardMarkup(row_width=6)
             buttons_list = [InlineKeyboardButton(str(i+1), callback_data=f"spell_{matches[i]}") for i in range(len(matches))]
             inline_kb_full.add(*buttons_list)
 
-            spells_text = '\n'.join([f"{i+1}. {spell}" for i, spell in enumerate(matches)])
+            spells_text = '\n'.join([f"{i+1}. {spell_cards[spell].title} [{spell_cards[spell].title_en}]" for i, spell in enumerate(matches)])
             await message.reply(f"В базе несколько заклинаний по вашему запросу:\n{spells_text}", reply_markup=inline_kb_full)
 
         else:
@@ -60,22 +64,6 @@ async def spell_callback_query(call: types.CallbackQuery):
     if call.data.startswith('spell_'):
         spell = call.data[6:]
         card = spell_cards[spell]
-
-        details = {
-            "Время накладывания": card.casting_time,
-            "Дистанция": card.c_range,
-            "Компоненты": card.components,
-            "Длительность": card.duration,
-            "Классы": card.classes,
-            "Архетипы": card.archetypes,
-        }
-
-        details_text = "\n".join([f"{key}: {value}" for key, value in details.items() if value is not None])
-
-        answer = f"{card.title} [{card.title_en}]\n\n" \
-                 f"{card.level_school}\n" \
-                 f"{details_text}\n\n" \
-                 f"{card.description}\n\n" \
-                 f"[Ссылка на DnD.su](https://dnd.su{card.link})"
+        answer = await generate_spell_card_details(card)
 
         await bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=answer)
