@@ -17,7 +17,7 @@ DnD Helper is a Telegram bot designed to assist with your Dungeons & Dragons gam
 - **Dice rolling**: The bot can roll a dice with a specified number of sides. Use the command `/roll N`, where N is the number of sides on the dice (defaults to 20 if not specified).
 - **Advanced dice rolling**: Use the format `/NdM+K`, where N is the number of dice, M is the number of sides per dice, and K is an optional modifier.
 - **Game scheduling**: Use `/set` followed by your text to save information about your next game. Use `/game` to retrieve this information.
-- **Information lookup**: Use `/spell`, `/class`, `/item`, `/bestiary` and `/mech` commands followed by their respective search term to get relevant information. If the item is found in the bot's database, it will provide a detailed description; otherwise, it will return a link to the DnD resource for further searching.
+- **Information lookup**: Use `/spell`, `/class`, `/item`, `/bestiary`, `/feat` and `/mech` commands followed by their respective search term to get relevant information. If the item is found in the bot's database, it will provide a detailed description; otherwise, it will return a link to the DnD resource for further searching.
 
 ## Prerequisites
 
@@ -32,7 +32,7 @@ DnD Helper is a Telegram bot designed to assist with your Dungeons & Dragons gam
 3) Set up a virtual environment and activate it.
 4) Install the necessary dependencies using `pip install -r requirements.txt`.
 5) Replace the placeholder token in config.py with your own bot token.
-6) Run the data scraping script using `python utils/spells_scraper.py`. This will populate your spells.json file. You don't need to do this every time. Just use the file provided.
+6) Run the data scraping script using `python utils/spells_scraper.py` and `python utils/feats_scraper.py`. This will populate your spells.json and feats files. You don't need to do this every time. Just use the file provided.
 7) Run the bot using `python main.py`.
 
 ## Deployment
@@ -81,15 +81,15 @@ After this, you can use `docker run` to start a container from the image, just a
 
 There's nothing to see here.
 For BotFather:
-
-start - Start using the bot and learn about its features
-help - Get information on how to use the bot
-roll - Roll dice. Use the format /NdM+K
-set - Set the schedule for the next game
-game - Get the schedule for the next game
-spell - Find or get a spell description, for example, /spell Fireball
-mech - Find a game mechanic, for example, /mech 'Sneak Attack'
-item - Find an item, for example, /item 'Longsword'
-bestiary - Find a creature in the bestiary, for example, /bestiary 'Dragon'
-class - Get a list of class links
-create_character - Create a random DnD character. Allows you to select preset, class, race, background, and the number of characters to create.
+start - Начать использование бота и узнать о его функциях
+help - Получить информацию о том, как использовать бота
+roll - Бросить кубики. Используйте формат /NdM+K
+set - Установить расписание следующей игры
+game - Получить расписание следующей игры
+spell - Найти или получить описание заклинания, например, /spell Fireball
+feat - Найти или получить описание черты, например, /feat Лекарь
+mech - Найти механику, например, /mech 'Sneak Attack'
+item - Найти предмет, например, /item 'Longsword'
+bestiary - Найти существо в бестиарии, например, /bestiary 'Dragon'
+class - Список ссылок на классы
+create_character - Создать случайного персонажа DnD. Позволяет выбрать пресет, класс, расу, предысторию и количество персонажей для создания.
