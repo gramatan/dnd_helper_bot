@@ -1,18 +1,10 @@
 import json
 import requests
 from bs4 import BeautifulSoup
-from dataclasses import asdict, dataclass
+from dataclasses import asdict
 from tqdm import tqdm
 
-
-@dataclass
-class FeatCard:
-    title: str
-    link: str
-    title_en: str = None
-    requirements: str = None
-    description: str = None
-    source: str = None
+from masterdata import FeatCard
 
 
 # This function extracts the necessary data from the feat's page
