@@ -39,6 +39,14 @@ def load_spells(path: str = 'spells.json'):
     return spell_cards
 
 
+def load_feats(path: str = 'feats.json'):
+    with open(path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    feat_cards = {k: FeatCard(**v) for k, v in data.items()}
+    return feat_cards
+
+
 RACE_LINK = 'https://dnd.su/race/'
 CLASS_LINK = 'https://dnd.su/class/'
 STORY_LINK = 'https://dnd.su/backgrounds/'
