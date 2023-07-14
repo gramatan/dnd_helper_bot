@@ -13,7 +13,7 @@ async def class_search(message: types.Message):
     else:
         spell = message.text[7:]    # remove '/class ' part
         answer = (
-            f"{user}, твоё заклинание где-то здесь:\n"
+            f"{user}, попробуй поискать тут:\n"
             f"[{spell}](https://dnd.su/class/?search={spell})"
         )
         await message.reply(answer, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
@@ -49,7 +49,7 @@ async def item_search(message: types.Message):
     else:
         spell = message.text[6:]    # remove '/item ' part
         answer = (
-            f"{user}, то что ты ищешь находится здесь:\n"
+            f"{user}, для поиска пройди по ссылке:\n"
             f"[{spell}](https://dnd.su/items/?search={spell})"
         )
         await message.reply(answer, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
