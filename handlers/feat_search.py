@@ -24,8 +24,8 @@ async def feat_search(message: types.Message):
         await message.reply(
             f"{user}, ты забыл ввести слова для поиска после /feat\n"
             "например:\n"
-            "/feat Ударный щит\n"
-            "/feat Меткий выстрел"
+            "/feat Борец\n"
+            "/feat Инфернальное телосложение"
         )
     else:
         feat = message.text[6:]    # remove '/feat ' part
