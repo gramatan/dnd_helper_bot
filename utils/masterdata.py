@@ -21,6 +21,15 @@ class SpellCard:
     description: str = None
 
 
+@dataclass
+class FeatCard:
+    title: str
+    title_en: str
+    link: str
+    description: str = None
+    source: str = None
+
+
 def load_spells(path: str = 'spells.json'):
     with open(path, 'r', encoding='utf-8') as f:
         data = json.load(f)
