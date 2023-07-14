@@ -5,12 +5,12 @@ from aiogram import executor
 from bot import dp
 from db.db import create_if_not_exist
 
-from handlers import create_char, guide, next_game, start, roll, spell_search
-from handlers.spell_search import spell_callback_query
-from utils.masterdata import load_spells
+from handlers import create_char, guide, next_game, start, roll, spell_search, feat_search
+from utils.masterdata import load_spells, load_feats
 
 create_if_not_exist()
 spell_cards = load_spells('utils/spells.json')
+feat_cards = load_feats('utils/feats.json')
 
 logger = logging.getLogger('logger')
 logger.setLevel(level=logging.DEBUG)
@@ -27,7 +27,10 @@ def register_handlers(dp):
     dp.register_message_handler(create_char.create_character, commands=['create_character'])
 
     dp.register_message_handler(spell_search.spell_search, commands=['spell'])
-    dp.register_callback_query_handler(spell_callback_query)
+    dp.register_callback_query_handler(spell_search.spell_callback_query)
+
+    dp.register_message_handler(feat_search.feat_search, commands=['feat'])
+    dp.register_callback_query_handler(feat_search.feat_callback_query)
 
     # create_char
     dp.register_callback_query_handler(create_char.reset_char_settings, lambda c: c.data == 'reset_char')
