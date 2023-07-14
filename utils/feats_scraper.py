@@ -42,8 +42,13 @@ def main():
         feat_card = scrape_feat_card_details(url)
         feat_cards.append(feat_card)
 
+    feat_cards_dict = {}
+    for card in feat_cards:
+        card_title_lower = card.title.lower()
+        feat_cards_dict[card_title_lower] = asdict(card)
+
     with open('feats.json', 'w', encoding='utf-8') as f:
-        json.dump([asdict(card) for card in feat_cards], f, ensure_ascii=False, indent=4)
+        json.dump(feat_cards_dict, f, ensure_ascii=False, indent=4)
 
 
 if __name__ == '__main__':
