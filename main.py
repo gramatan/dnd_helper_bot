@@ -3,7 +3,7 @@ from aiogram import executor
 from bot import dp
 from db.db import create_if_not_exist
 
-from handlers import create_char, guide, next_game, start, roll
+from handlers import create_char, guide, next_game, start, roll, spell_search
 from utils.masterdata import load_spells
 
 create_if_not_exist()
@@ -15,7 +15,7 @@ def register_handlers(dp):
     dp.register_message_handler(next_game.set_game, commands=['set'])
     dp.register_message_handler(next_game.get_game, commands=['game'])
     dp.register_message_handler(guide.class_search, commands=['class'])
-    dp.register_message_handler(guide.spell_search, commands=['spell'])
+    dp.register_message_handler(spell_search.spell_search, commands=['spell'])
     dp.register_message_handler(guide.mech_search, commands=['mech'])
     dp.register_message_handler(guide.item_search, commands=['item'])
     dp.register_message_handler(guide.bestiary_search, commands=['bestiary'])
