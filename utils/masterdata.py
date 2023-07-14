@@ -31,19 +31,25 @@ class FeatCard:
     source: str = None
 
 
-def load_spells(path: str = 'spells.json'):
-    with open(path, 'r', encoding='utf-8') as f:
-        data = json.load(f)
+def load_spells(path: str = 'spells.json') -> dict:
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
 
-    spell_cards = {k: SpellCard(**v) for k, v in data.items()}
+        spell_cards = {k: SpellCard(**v) for k, v in data.items()}
+    except FileNotFoundError:
+        spell_cards = {}
     return spell_cards
 
 
-def load_feats(path: str = 'feats.json'):
-    with open(path, 'r', encoding='utf-8') as f:
-        data = json.load(f)
+def load_feats(path: str = 'feats.json') -> dict:
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
 
-    feat_cards = {k: FeatCard(**v) for k, v in data.items()}
+        feat_cards = {k: FeatCard(**v) for k, v in data.items()}
+    except FileNotFoundError:
+        feat_cards = {}
     return feat_cards
 
 
