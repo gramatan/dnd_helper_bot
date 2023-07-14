@@ -24,8 +24,9 @@ class SpellCard:
 @dataclass
 class FeatCard:
     title: str
-    title_en: str
     link: str
+    title_en: str = None
+    requirements: str = None
     description: str = None
     source: str = None
 
