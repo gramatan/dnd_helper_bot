@@ -7,7 +7,7 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 
-from masterdata import SpellCard
+from utils.masterdata import SpellCard
 
 
 # Function to scroll through the page and retrieve all data
@@ -97,7 +97,7 @@ def main():
         card_title_lower = card.title.lower()
         spell_cards_dict[card_title_lower] = asdict(card)
 
-    with open('spells.json', 'w', encoding='utf-8') as f:
+    with open('../spells.json', 'w', encoding='utf-8') as f:
         json.dump(spell_cards_dict, f, ensure_ascii=False, indent=4)
 
 

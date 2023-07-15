@@ -14,7 +14,7 @@ async def generate_feat_card_details(card):
 
     return f"{card.title} [[{card.title_en}]]\n\n" \
            f"{details_text}\n\n" \
-           f"[Ссылка на DnD.su]({card.link})"
+           f"[Ссылка на DnD.su](https://dnd.su{card.link})"
 
 
 async def feat_search(message: types.Message):
