@@ -1,5 +1,6 @@
 from aiogram import types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from fuzzywuzzy import fuzz
 
 
 async def generate_spell_card_details(card):
@@ -32,20 +33,23 @@ async def spell_search(message: types.Message):
             "/spell Власть над водами"
         )
     else:
-        spell = message.text[7:]    # remove '/spell ' part
+        spell = message.text[7:]  # remove '/spell ' part
         spell_lower = spell.lower()
-        matches = [key for key in spell_cards.keys() if spell_lower in key]
+        # Use fuzzy matching for better results
+        matches = [card.id for card in spell_cards.values() if fuzz.partial_ratio(spell_lower, card.title.lower()) > 75]
+
         if len(matches) == 1:
             card = spell_cards[matches[0]]
             answer = await generate_spell_card_details(card)
             await message.reply(answer, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
 
-        elif 1 < len(matches) < 13:
+        elif 1 < len(matches) < 25:
             spell_inline_kb_full = InlineKeyboardMarkup(row_width=6)
-            buttons_list = [InlineKeyboardButton(str(i+1),
-                                                 callback_data=f"spell_{matches[i]}") for i in range(len(matches))]
+            buttons_list = [InlineKeyboardButton(str(i + 1),
+                                                 callback_data=f"spell_{spell_cards[spell].id}") for i, spell in
+                            enumerate(matches)]
             spell_inline_kb_full.add(*buttons_list)
-            spells_text = '\n'.join([f"{i+1}. {spell_cards[spell].title}"
+            spells_text = '\n'.join([f"{i + 1}. {spell_cards[spell].title}"
                                      f" [{spell_cards[spell].title_en}]" for i, spell in enumerate(matches)])
             await message.reply(f"В базе несколько заклинаний по вашему запросу:\n{spells_text}",
                                 reply_markup=spell_inline_kb_full)
@@ -63,8 +67,8 @@ async def spell_callback_query(call: types.CallbackQuery):
     from bot import bot
 
     if call.data.startswith('spell_'):
-        spell = call.data[6:]
-        card = spell_cards[spell]
+        spell_id = int(call.data[6:])  # Parse the spell id
+        card = spell_cards[spell_id]
         answer = await generate_spell_card_details(card)
 
         await bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=answer,
