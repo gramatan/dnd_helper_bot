@@ -19,24 +19,6 @@ async def class_search(message: types.Message):
         await message.reply(answer, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
 
 
-async def bestiary_search(message: types.Message):
-    user = message.from_user.first_name
-    if len(message.text) < 8:
-        await message.reply(
-            f"{user}, никак ты не научишься, необходимо ввести слова для поиска после /bestiary\n"
-            "например:\n"
-            "/bestiary Багбиры\n"
-            "/bestiary Вегепигмеи "
-            )
-    else:
-        spell = message.text[10:]    # remove '/bestiary ' part
-        answer = (
-            f"{user}, то что ты ищешь находится здесь:\n"
-            f"[{spell}](https://dnd.su/articles/bestiary/?search={spell})"
-        )
-        await message.reply(answer, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
-
-
 async def item_search(message: types.Message):
     user = message.from_user.first_name
     if len(message.text) < 8:

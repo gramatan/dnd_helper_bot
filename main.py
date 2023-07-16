@@ -2,15 +2,18 @@ import logging
 
 from aiogram import executor
 
+import handlers.bestiary_search
 from bot import dp
 from db.db import create_if_not_exist
 
 from handlers import create_char, guide, next_game, start, roll, spell_search, feat_search
-from utils.masterdata import load_spells, load_feats
+from utils.masterdata import load_spells, load_feats, load_beasts
 
 create_if_not_exist()
 spell_cards = load_spells('utils/spells.json')
 feat_cards = load_feats('utils/feats.json')
+beast_cards = load_beasts('utils/beasts.json')
+logging.info('Spells, feats and beasts loaded')
 
 logger = logging.getLogger('logger')
 logger.setLevel(level=logging.DEBUG)
@@ -24,11 +27,15 @@ def register_handlers(dp):
     dp.register_message_handler(guide.class_search, commands=['class'])
     dp.register_message_handler(guide.mech_search, commands=['mech'])
     dp.register_message_handler(guide.item_search, commands=['item'])
-    dp.register_message_handler(guide.bestiary_search, commands=['bestiary'])
     dp.register_message_handler(create_char.create_character, commands=['create_character'])
+
+    dp.register_message_handler(handlers.bestiary_search.bestiary_search, commands=['bestiary'])
+    dp.register_callback_query_handler(handlers.bestiary_search.beast_callback_query,
+                                       lambda call: call.data.startswith('beast_'))
 
     dp.register_message_handler(spell_search.spell_search, commands=['spell'])
     dp.register_callback_query_handler(spell_search.spell_callback_query, lambda call: call.data.startswith('spell_'))
+
     dp.register_message_handler(feat_search.feat_search, commands=['feat'])
     dp.register_callback_query_handler(feat_search.feat_callback_query, lambda call: call.data.startswith('feat_'))
 
