@@ -40,7 +40,7 @@ async def spell_search(message: types.Message):
             answer = await generate_spell_card_details(card)
             await message.reply(answer, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
 
-        elif 1 < len(matches) < 9:
+        elif 1 < len(matches) < 13:
             spell_inline_kb_full = InlineKeyboardMarkup(row_width=6)
             buttons_list = [InlineKeyboardButton(str(i+1),
                                                  callback_data=f"spell_{matches[i]}") for i in range(len(matches))]
