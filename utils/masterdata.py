@@ -15,31 +15,31 @@ class BeastCard:
 
 @dataclass
 class SpellCard:
-    title: str
-    title_en: str
-    link: str
-    level: str
-    school: str
-    level_school: str = None
-    casting_time: str = None
-    c_range: str = None
-    components: str = None
-    duration: str = None
-    classes: str = None
-    archetypes: str = None
-    source: str = None
-    description: str = None
-
+    title: Optional[str] = None
+    title_en: Optional[str] = None
+    link: Optional[str] = None
+    level: Optional[str] = None
+    school: Optional[str] = None
+    level_school: Optional[str] = None
+    casting_time: Optional[str] = None
+    c_range: Optional[str] = None
+    components: Optional[str] = None
+    duration: Optional[str] = None
+    classes: Optional[str] = None
+    archetypes: Optional[str] = None
+    source: Optional[str] = None
+    description: Optional[str] = None
+    id: Optional[int] = None
 
 @dataclass
 class FeatCard:
-    title: str
-    link: str
-    title_en: str = None
-    requirements: str = None
-    description: str = None
-    source: str = None
-
+    title: Optional[str] = None
+    link: Optional[str] = None
+    title_en: Optional[str] = None
+    requirements: Optional[str] = None
+    description: Optional[str] = None
+    source: Optional[str] = None
+    id: Optional[int] = None
 
 def load_beasts(path: str = 'beasts.json') -> dict:
     try:
@@ -59,7 +59,8 @@ def load_spells(path: str = 'spells.json') -> dict:
         with open(path, 'r', encoding='utf-8') as f:
             data = json.load(f)
 
-        spell_cards = {k: SpellCard(**v) for k, v in data.items()}
+        spell_cards = {i+1: SpellCard(**{k: v for k, v in card.items() if k != 'id'}, id=i+1)
+                       for i, card in enumerate(data.values())}
     except FileNotFoundError:
         from main import logger
         logger.warning(f'Spells upload failed! File {path} not found')
@@ -72,7 +73,8 @@ def load_feats(path: str = 'feats.json') -> dict:
         with open(path, 'r', encoding='utf-8') as f:
             data = json.load(f)
 
-        feat_cards = {k: FeatCard(**v) for k, v in data.items()}
+        feat_cards = {i+1: FeatCard(**{k: v for k, v in card.items() if k != 'id'}, id=i+1)
+                      for i, card in enumerate(data.values())}
     except FileNotFoundError:
         from main import logger
         logger.warning(f'Feats upload failed! File {path} not found')
