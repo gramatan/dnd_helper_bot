@@ -1,6 +1,16 @@
 import json
 
 from dataclasses import dataclass
+from typing import Optional
+
+
+@dataclass
+class BeastCard:
+    id: str
+    name: str
+    url: str
+    danger: Optional[str] = None
+    type: Optional[str] = None
 
 
 @dataclass
@@ -29,6 +39,19 @@ class FeatCard:
     requirements: str = None
     description: str = None
     source: str = None
+
+
+def load_beasts(path: str = 'beasts.json') -> dict:
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+
+        beast_cards = {k: BeastCard(**v) for k, v in data.items()}
+    except FileNotFoundError:
+        from main import logger
+        logger.warning(f'Beasts upload failed! File {path} not found')
+        beast_cards = {}
+    return beast_cards
 
 
 def load_spells(path: str = 'spells.json') -> dict:
