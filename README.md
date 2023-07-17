@@ -1,6 +1,9 @@
 # DnD Helper Bot
 
 DnD Helper is a Telegram bot designed to assist with your Dungeons & Dragons gaming sessions. It can roll dice, set and retrieve game information, and provide spell descriptions, among other features.
+Try it here:
+![IMG_20230717_171553_992~01](https://github.com/gramatan/dnd_helper_bot/assets/78417563/feeb8ff7-1ac1-443e-92f4-e15084a7bbc8)
+
 
 ## Table of Contents
 
