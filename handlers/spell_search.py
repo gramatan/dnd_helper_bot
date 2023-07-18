@@ -33,7 +33,7 @@ async def spell_search(message: types.Message):
             "/spell Власть над водами"
         )
     else:
-        spell = message.text[7:]  # remove '/spell ' part
+        spell = ' '.join(message.text.split()[1:])  # remove '/spell ' part
         spell_lower = spell.lower()
         # Use fuzzy matching for better results
         matches = [card.id for card in spell_cards.values() if fuzz.partial_ratio(spell_lower, card.title.lower()) > 75]

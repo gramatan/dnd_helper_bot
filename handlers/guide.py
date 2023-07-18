@@ -11,7 +11,7 @@ async def class_search(message: types.Message):
             "/class рывок"
             )
     else:
-        spell = message.text[7:]    # remove '/class ' part
+        spell = ' '.join(message.text.split()[1:])    # remove '/class ' part
         answer = (
             f"{user}, попробуй поискать тут:\n"
             f"[{spell}](https://dnd.su/class/?search={spell})"
@@ -29,7 +29,7 @@ async def item_search(message: types.Message):
             "/item посох защиты "
             )
     else:
-        spell = message.text[6:]    # remove '/item ' part
+        spell = ' '.join(message.text.split()[1:])    # remove '/item ' part
         answer = (
             f"{user}, для поиска пройди по ссылке:\n"
             f"[{spell}](https://dnd.su/items/?search={spell})"
@@ -48,7 +48,7 @@ async def mech_search(message: types.Message):
             "/mech языки"
             )
     else:
-        spell = message.text[6:]    # remove '/mech ' part
+        spell = ' '.join(message.text.split()[1:])    # remove '/mech ' part
         answer = (
             f"{user}, то что ты ищешь находится здесь:\n"
             f"[{spell}](https://dnd.su/mechanics/?search={spell})"

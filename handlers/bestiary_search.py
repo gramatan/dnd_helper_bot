@@ -1,6 +1,8 @@
 from aiogram import types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from fuzzywuzzy import fuzz
+
+
 async def generate_beast_card_details(card):
     details = {
         "Опасность": card.danger,
@@ -25,7 +27,7 @@ async def bestiary_search(message: types.Message):
             "/bestiary Вегепигмеи"
         )
     else:
-        beast = message.text[10:]    # remove '/bestiary ' part
+        beast = ' '.join(message.text.split()[1:])    # remove '/bestiary ' part
         beast_lower = beast.lower()
         matches = [key for key in beast_cards.keys() if fuzz.partial_ratio(beast_lower, key) > 75]
 

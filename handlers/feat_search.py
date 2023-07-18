@@ -29,7 +29,7 @@ async def feat_search(message: types.Message):
             "/feat Инфернальное телосложение"
         )
     else:
-        feat = message.text[6:]    # remove '/feat ' part
+        feat = ' '.join(message.text.split()[1:])    # remove '/feat ' part
         feat_lower = feat.lower()
         # matches = [key for key in feat_cards.keys() if feat_lower in key]
         matches = [card.id for card in feat_cards.values() if fuzz.partial_ratio(feat_lower, card.title.lower()) > 75]
