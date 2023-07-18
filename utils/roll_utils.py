@@ -2,14 +2,10 @@ import re
 import random
 
 
-from utils.masterdata import CLASSIC_ITEMS, EXTENDED_ITEMS, CLASS_LINK, RACE_LINK, STORY_LINK, CLASSES, CLASSIC_CLASSES, \
-    RACES, CLASSIC_RACES, STORIES, CLASSIC_STORIES
-
-
 def roll_dice(expression):
     # Special case for /d or /D
     if expression.lower() == 'd':
-        return f'{random.randint(1, 20)} of 20'
+        return f'{random.randint(1, 20)} (d20)'
 
     # Check for numbers larger than 1000
     if any(int(num) > 1000 for num in re.findall(r'\d+', expression)):
