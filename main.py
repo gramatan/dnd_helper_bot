@@ -21,7 +21,8 @@ logger.setLevel(level=logging.DEBUG)
 
 
 def register_handlers(dp):
-    dp.register_message_handler(start.send_welcome, commands=['start', 'help'])
+    dp.register_message_handler(start.start_message, commands=['start'])
+    dp.register_message_handler(start.help_message, commands=['help'])
     dp.register_message_handler(next_game.set_game, commands=['set'])
     dp.register_message_handler(next_game.get_game, commands=['game'])
     dp.register_message_handler(guide.class_search, commands=['class'])

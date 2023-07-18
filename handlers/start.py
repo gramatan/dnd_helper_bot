@@ -2,7 +2,7 @@ from aiogram import types
 
 from bot import dp
 
-WELCOME = (
+HELP_MESSAGE = (
     "Привет! Я бот, который может помочь в ваших DnD приключениях, бросая кости за вас и предоставляя информацию "
     "из различных справочников. Вот, что я могу сделать:\n\n"
 
@@ -42,7 +42,17 @@ WELCOME = (
     "[Миниатюры персонажей Hero Forge](https://www.heroforge.com)\n"
 )
 
+START_MESSAGE = (
+    "Привет! Я бот, который может помочь в ваших DnD приключениях.\n"
+    "Вы можете использовать команду /help чтобы узнать больше обо мне и моих возможностях."
+)
 
-async def send_welcome(message: types.Message):
-    welcome_message = WELCOME
+
+async def start_message(message: types.Message):
+    welcome_message = START_MESSAGE
+    await message.reply(welcome_message, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
+
+
+async def help_message(message: types.Message):
+    welcome_message = HELP_MESSAGE
     await message.reply(welcome_message, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
