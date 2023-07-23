@@ -24,7 +24,8 @@ async def bestiary_search(message: types.Message):
             f"Ух ты, {user}, память как у золотой рыбки! Тебе нужно ввести слова для поиска после /bestiary.\n"
             "Вот так, например:\n"
             "/bestiary Багбиры\n"
-            "/bestiary Вегепигмеи"
+            "/bestiary Вегепигмеи",
+            parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True
         )
     else:
         beast = ' '.join(message.text.split()[1:])    # remove '/bestiary ' part
@@ -36,7 +37,7 @@ async def bestiary_search(message: types.Message):
             answer = await generate_beast_card_details(card)
             await message.reply(answer, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
 
-        elif 1 < len(matches) < 13:
+        elif 1 < len(matches) < 37:
             beast_inline_kb_full = InlineKeyboardMarkup(row_width=6)
             buttons_list = [InlineKeyboardButton(str(i + 1),
                                                  callback_data=f"beast_{beast_cards[beast].id}")
@@ -48,7 +49,7 @@ async def bestiary_search(message: types.Message):
 
         else:
             answer = (
-                "Ну что ж, {user}, твоего зверюшку нужно искать в дебрях бестиария:\n"
+                f"Ну что ж, {user}, твою зверюшку нужно искать в дебрях бестиария:\n"
                 f"[{beast}](https://dnd.su/articles/bestiary/?search={beast})"
             )
             await message.reply(answer, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
