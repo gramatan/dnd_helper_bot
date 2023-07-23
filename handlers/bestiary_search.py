@@ -18,10 +18,9 @@ async def generate_beast_card_details(card):
 
 async def bestiary_search(message: types.Message):
     from main import beast_cards
-    user = message.from_user.first_name
     if len(message.text) < 10:
         await message.reply(
-            f"Ух ты, {user}, память как у золотой рыбки! Тебе нужно ввести слова для поиска после /bestiary.\n"
+            f"Ух ты, память как у золотой рыбки! Тебе нужно ввести слова для поиска после /bestiary.\n"
             "Вот так, например:\n"
             "/bestiary Багбиры\n"
             "/bestiary Вегепигмеи",
@@ -44,12 +43,12 @@ async def bestiary_search(message: types.Message):
                             for i, beast in enumerate(matches)]
             beast_inline_kb_full.add(*buttons_list)
             beasts_text = '\n'.join([f"{i + 1}. {beast_cards[beast].name}" for i, beast in enumerate(matches)])
-            await message.reply(f"Ой, {user}, твой запрос вернул несколько зверюшек:\n{beasts_text}",
+            await message.reply(f"Ой! твой запрос вернул несколько зверюшек:\n{beasts_text}",
                                 reply_markup=beast_inline_kb_full)
 
         else:
             answer = (
-                f"Ну что ж, {user}, твою зверюшку нужно искать в дебрях бестиария:\n"
+                f"Ну что ж, твою зверюшку нужно искать в дебрях бестиария:\n"
                 f"[{beast}](https://dnd.su/articles/bestiary/?search={beast})"
             )
             await message.reply(answer, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)

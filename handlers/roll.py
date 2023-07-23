@@ -13,9 +13,8 @@ async def roll_dice_command(message: types.Message):
 
     roll, sides = dx_roll(dice)
 
-    user = message.from_user.first_name
-    answer = f"бросок d{sides} от {user}: {roll}"
-    await message.answer(answer)
+    answer = f"d{sides}: {roll}"
+    await message.reply(answer)
 
 
 # main handler for expressions

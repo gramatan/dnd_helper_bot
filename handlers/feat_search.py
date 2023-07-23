@@ -4,8 +4,6 @@ from fuzzywuzzy import fuzz
 
 
 async def generate_feat_card_details(card):
-    from main import logger
-    logger.info(f"generate_feat_card_details: {card}")
     details = {
         "Требования": card.requirements,
         "Полное описание": card.description,
@@ -20,10 +18,9 @@ async def generate_feat_card_details(card):
 
 async def feat_search(message: types.Message):
     from main import feat_cards
-    user = message.from_user.first_name
     if len(message.text) < 6:
         await message.reply(
-            f"{user}, ты забыл ввести слова для поиска после /feat\n"
+            f"Ты забыл ввести слова для поиска после /feat\n"
             "например:\n"
             "/feat Борец\n"
             "/feat Инфернальное телосложение"
@@ -31,14 +28,13 @@ async def feat_search(message: types.Message):
     else:
         feat = ' '.join(message.text.split()[1:])    # remove '/feat ' part
         feat_lower = feat.lower()
-        # matches = [key for key in feat_cards.keys() if feat_lower in key]
         matches = [card.id for card in feat_cards.values() if fuzz.partial_ratio(feat_lower, card.title.lower()) > 75]
         if len(matches) == 1:
             card = feat_cards[matches[0]]
             answer = await generate_feat_card_details(card)
             await message.reply(answer, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
 
-        elif 1 < len(matches) < 25:
+        elif 1 < len(matches) < 37:
             feat_inline_kb_full = InlineKeyboardMarkup(row_width=6)
             buttons_list = [InlineKeyboardButton(str(i+1),
                                                  callback_data=f"feat_{feat_cards[feat].id}") for i, feat

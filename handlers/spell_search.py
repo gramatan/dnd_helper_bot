@@ -24,10 +24,9 @@ async def generate_spell_card_details(card):
 
 async def spell_search(message: types.Message):
     from main import spell_cards
-    user = message.from_user.first_name
     if len(message.text) < 8:
         await message.reply(
-            f"{user}, ты забыл ввести слова для поиска после /spell\n"
+            f"Ты забыл ввести слова для поиска после /spell\n"
             "например:\n"
             "/spell водоворот\n"
             "/spell Власть над водами"
