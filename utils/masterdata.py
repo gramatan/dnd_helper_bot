@@ -1,3 +1,4 @@
+import logging
 import json
 
 from dataclasses import dataclass
@@ -48,8 +49,7 @@ def load_beasts(path: str = 'beasts.json') -> dict:
 
         beast_cards = {k: BeastCard(**v) for k, v in data.items()}
     except FileNotFoundError:
-        from main import logger
-        logger.warning(f'Beasts upload failed! File {path} not found')
+        logging.warning(f'Beasts upload failed! File {path} not found')
         beast_cards = {}
     return beast_cards
 
@@ -62,8 +62,7 @@ def load_spells(path: str = 'spells.json') -> dict:
         spell_cards = {i+1: SpellCard(**{k: v for k, v in card.items() if k != 'id'}, id=i+1)
                        for i, card in enumerate(data.values())}
     except FileNotFoundError:
-        from main import logger
-        logger.warning(f'Spells upload failed! File {path} not found')
+        logging.warning(f'Spells upload failed! File {path} not found')
         spell_cards = {}
     return spell_cards
 
@@ -76,8 +75,7 @@ def load_feats(path: str = 'feats.json') -> dict:
         feat_cards = {i+1: FeatCard(**{k: v for k, v in card.items() if k != 'id'}, id=i+1)
                       for i, card in enumerate(data.values())}
     except FileNotFoundError:
-        from main import logger
-        logger.warning(f'Feats upload failed! File {path} not found')
+        logging.warning(f'Feats upload failed! File {path} not found')
         feat_cards = {}
     return feat_cards
 

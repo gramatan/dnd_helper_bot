@@ -15,10 +15,6 @@ feat_cards = load_feats('utils/feats.json')
 beast_cards = load_beasts('utils/beasts.json')
 logging.info('Spells, feats and beasts loaded')
 
-logger = logging.getLogger('logger')
-logger.setLevel(level=logging.DEBUG)
-# logger.setLevel(level=logging.INFO)
-
 
 def register_handlers(dp):
     dp.register_message_handler(start.start_message, commands=['start'])
