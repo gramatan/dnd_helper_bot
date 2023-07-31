@@ -2,7 +2,7 @@ from aiogram import types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.exceptions import MessageNotModified
 
-from bot import dp, bot
+from bot import dp, bot, handler_name
 from keyboards.keyboard import character_creation_keyboard
 from utils.masterdata import CLASSIC_CLASSES, CLASSES, RACES, CLASSIC_RACES, CLASSIC_STORIES, STORIES
 
@@ -11,6 +11,7 @@ from utils.character_creation_utils import reset_user_settings, generate_current
 
 
 async def create_character(message: types.Message):
+    handler_name.set("Create character")
     reset_user_settings(message.chat.id)
     answer = generate_current_settings_message(message.chat.id)
     await bot.send_message(

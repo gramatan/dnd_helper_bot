@@ -2,6 +2,8 @@ from aiogram import types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from fuzzywuzzy import fuzz
 
+from bot import handler_name
+
 
 async def generate_feat_card_details(card):
     details = {
@@ -17,6 +19,7 @@ async def generate_feat_card_details(card):
 
 
 async def feat_search(message: types.Message):
+    handler_name.set("Feat search")
     from main import feat_cards
     if len(message.text) < 6:
         await message.reply(

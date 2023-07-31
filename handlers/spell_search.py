@@ -2,6 +2,8 @@ from aiogram import types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from fuzzywuzzy import fuzz
 
+from bot import handler_name
+
 
 async def generate_spell_card_details(card):
     details = {
@@ -23,6 +25,7 @@ async def generate_spell_card_details(card):
 
 
 async def spell_search(message: types.Message):
+    handler_name.set("Spell search")
     from main import spell_cards
     if len(message.text) < 8:
         await message.reply(

@@ -1,6 +1,7 @@
 from aiogram import types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from fuzzywuzzy import fuzz
+from bot import handler_name
 
 
 async def generate_beast_card_details(card):
@@ -17,6 +18,7 @@ async def generate_beast_card_details(card):
 
 
 async def bestiary_search(message: types.Message):
+    handler_name.set("Bestiary search")
     from main import beast_cards
     if len(message.text) < 10:
         await message.reply(

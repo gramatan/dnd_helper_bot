@@ -1,15 +1,15 @@
 import sqlite3
-import csv
 
 from datetime import datetime, timedelta
 
 
 def log_message(message):
+    from bot import handler_name
     conn = sqlite3.connect('dnd_bot.db')
     c = conn.cursor()
     is_private = 1 if message.chat.id > 0 else 0
     c.execute("INSERT INTO logs VALUES (?, ?, ?, ?)", (str(datetime.now()), message.from_user.id,
-                                                       int(is_private), message.text))
+                                                       int(is_private), handler_name.get()))
     conn.commit()
     conn.close()
 
@@ -50,18 +50,24 @@ def get_month_stats():
     return result
 
 
-def export_to_csv():
+def get_top_5_requests():
     conn = sqlite3.connect('dnd_bot.db')
     c = conn.cursor()
 
-    c.execute("SELECT * FROM logs")
+    week_ago = datetime.now() - timedelta(days=7)
+    query = f"""
+    SELECT text, COUNT(*)
+    FROM logs
+    WHERE date > '{week_ago.strftime('%Y-%m-%d %H:%M:%S')}'
+    GROUP BY text
+    ORDER BY COUNT(*) DESC
+    LIMIT 5
+    """
+    c.execute(query)
     result = c.fetchall()
-
-    with open('logs.csv', 'w', newline='', encoding='utf-8') as file:
-        writer = csv.writer(file)
-        writer.writerow(['date', 'user_id', 'is_private', 'text'])
-        writer.writerows(result)
 
     conn.close()
 
-    return 'logs.csv'
+    return result
+
+

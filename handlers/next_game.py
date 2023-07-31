@@ -2,10 +2,11 @@ import sqlite3
 
 from aiogram import types
 
-from bot import dp
+from bot import dp, handler_name
 
 
 async def set_game(message: types.Message):
+    handler_name.set("Set game")
     chat_id = message.chat.id
     game_info = message.text[5:]  # Removes the '/set ' part
 
@@ -23,6 +24,7 @@ async def set_game(message: types.Message):
 
 
 async def get_game(message: types.Message):
+    handler_name.set("Get game")
     chat_id = message.chat.id
 
     conn = sqlite3.connect('dnd_bot.db')

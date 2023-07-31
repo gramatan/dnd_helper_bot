@@ -1,6 +1,6 @@
 from aiogram import types
 
-from bot import dp
+from bot import dp, handler_name
 
 HELP_MESSAGE = (
     "Привет! Я бот, который может помочь в ваших DnD приключениях, бросая кости за вас и предоставляя информацию "
@@ -49,10 +49,12 @@ START_MESSAGE = (
 
 
 async def start_message(message: types.Message):
+    handler_name.set("Start")
     welcome_message = START_MESSAGE
     await message.reply(welcome_message, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
 
 
 async def help_message(message: types.Message):
+    handler_name.set("Help")
     welcome_message = HELP_MESSAGE
     await message.reply(welcome_message, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)

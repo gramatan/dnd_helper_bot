@@ -1,7 +1,10 @@
 from aiogram import types
 
+from bot import handler_name
+
 
 async def class_search(message: types.Message):
+    handler_name.set("Class search")
     if len(message.text) < 8:
         await message.reply(
             f"Необходимо ввести слова для поиска после /class, орочья ты башка\n"
@@ -19,6 +22,7 @@ async def class_search(message: types.Message):
 
 
 async def item_search(message: types.Message):
+    handler_name.set("Item search")
     if len(message.text) < 8:
         await message.reply(
             f"Это поиск магических предметов, необходимо ввести слова для поиска после /item\n"
@@ -36,6 +40,7 @@ async def item_search(message: types.Message):
 
 
 async def mech_search(message: types.Message):
+    handler_name.set("Mechanic search")
     if len(message.text) < 8:
         await message.reply(
             f"Это поиск! чтобы что-то поискать, нужно что-то поискать.\n"
