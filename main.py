@@ -4,9 +4,11 @@ from aiogram import executor
 
 import handlers.bestiary_search
 from bot import dp
+from config import ADMIN_ID
 from db.db import create_if_not_exist
 
 from handlers import create_char, guide, next_game, start, roll, spell_search, feat_search
+from handlers.statistics import stats_command, on_csv_button
 from utils.masterdata import load_spells, load_feats, load_beasts
 
 create_if_not_exist()
@@ -51,6 +53,9 @@ def register_handlers(dp):
     dp.register_callback_query_handler(create_char.selected_num_chars,
                                        lambda c: c.data.startswith('selected_num_chars_'))
     dp.register_callback_query_handler(create_char.generate, lambda c: c.data == 'generate')
+
+    dp.register_message_handler(stats_command, commands=['stats'], user_id=ADMIN_ID)
+    dp.register_callback_query_handler(on_csv_button)
 
     dp.register_message_handler(roll.roll_dice_command, commands=['roll'])
     dp.register_message_handler(roll.dice_roll)  # should be the last one, because it has a catch-all handler
