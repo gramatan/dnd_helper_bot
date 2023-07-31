@@ -2,6 +2,7 @@ import re
 
 from aiogram import types
 
+from bot import ignore_log
 from utils.roll_utils import dx_roll, roll_dice
 
 
@@ -23,3 +24,5 @@ async def dice_roll(message: types.Message):
     if requests:
         results = [f'{request}: {roll_dice(request)}' for request in requests]
         await message.reply('\n'.join(results))
+    else:
+        ignore_log.set(True)
