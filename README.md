@@ -41,8 +41,7 @@ Try it here:
 ## Deployment
 
 1) Build a Docker image using `docker build -t my_dnd_bot .`.
-2) Create Volume to keep your database safe using `docker volume create my_dnd_bot_db`.
-3) Run a Docker container from the image using `docker run -v my_dnd_bot_db:/app/db -d --restart unless-stopped my_dnd_bot`.
+2) Run a Docker container from the image using `docker run -d --restart unless-stopped my_dnd_bot`.
 
 ## Updating the Bot
 
