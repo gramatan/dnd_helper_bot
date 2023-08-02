@@ -1,4 +1,5 @@
 import logging
+import os
 
 import sqlite3
 from contextlib import contextmanager
@@ -17,6 +18,9 @@ def database_connection(commit=False):
 
 
 def create_if_not_exist():
+    db_dir = './db'
+    os.makedirs(db_dir, exist_ok=True)
+
     try:
         with database_connection(commit=True) as cursor:
             # Create table games
