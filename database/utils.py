@@ -64,3 +64,15 @@ def get_top_5_requests():
     return result
 
 
+def db_set_game(chat_id, game_info):
+    with database_connection(commit=True) as cursor:
+        cursor.execute('''INSERT OR REPLACE INTO games (chat_id, game_info)
+                     VALUES (?, ?)''', (chat_id, game_info))
+    return None
+
+
+def db_get_game(chat_id):
+    with database_connection(commit=True) as cursor:
+        cursor.execute("SELECT game_info FROM games WHERE chat_id = ?", chat_id)
+        game_info = cursor.fetchone()
+    return game_info
