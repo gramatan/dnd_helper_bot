@@ -15,7 +15,7 @@ handler_name = ContextVar("handler_name", default="")
 
 class LoggingMiddleware(BaseMiddleware):
     async def on_post_process_message(self, message: types.Message, *args):
-        from db.utils import log_message
+        from database.utils import log_message
         log_message(message)
 
 

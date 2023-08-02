@@ -4,7 +4,7 @@ import sqlite3
 
 def create_if_not_exist():
     try:
-        conn = sqlite3.connect('./dnd_bot.db')  # Creates a new db file if it doesn't exist
+        conn = sqlite3.connect('./db/dnd_bot.db')  # Creates a new db file if it doesn't exist
         c = conn.cursor()
 
         # Create table games

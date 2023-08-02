@@ -8,7 +8,7 @@ def log_message(message):
     from bot import handler_name
     handler = handler_name.get()
     if handler != '' and handler != 'Stats':
-        conn = sqlite3.connect('dnd_bot.db')
+        conn = sqlite3.connect('db/dnd_bot.db')
         c = conn.cursor()
         is_private = 1 if message.chat.id > 0 else 0
 
@@ -20,7 +20,7 @@ def log_message(message):
 
 
 def get_week_stats():
-    conn = sqlite3.connect('dnd_bot.db')
+    conn = sqlite3.connect('db/dnd_bot.db')
     c = conn.cursor()
 
     week_ago = datetime.now() - timedelta(days=7)
@@ -38,7 +38,7 @@ def get_week_stats():
 
 
 def get_month_stats():
-    conn = sqlite3.connect('dnd_bot.db')
+    conn = sqlite3.connect('db/dnd_bot.db')
     c = conn.cursor()
 
     month_ago = datetime.now() - timedelta(days=30)
@@ -56,7 +56,7 @@ def get_month_stats():
 
 
 def get_top_5_requests():
-    conn = sqlite3.connect('dnd_bot.db')
+    conn = sqlite3.connect('db/dnd_bot.db')
     c = conn.cursor()
 
     week_ago = datetime.now() - timedelta(days=7)

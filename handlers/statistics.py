@@ -4,12 +4,12 @@ import sqlite3
 from aiogram import types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from db.utils import get_week_stats, get_month_stats, get_top_5_requests
+from database.utils import get_week_stats, get_month_stats, get_top_5_requests
 from bot import handler_name
 
 
 def export_to_csv():
-    conn = sqlite3.connect('dnd_bot.db')
+    conn = sqlite3.connect('db/dnd_bot.db')
     c = conn.cursor()
 
     c.execute("SELECT * FROM logs")

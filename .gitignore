@@ -1,5 +1,5 @@
 config.py
-dnd_bot.db
+db/dnd_bot.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

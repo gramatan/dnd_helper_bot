@@ -5,7 +5,7 @@ from aiogram import executor
 import handlers.bestiary_search
 from bot import dp
 from config import ADMIN_ID
-from db.db import create_if_not_exist
+from database.db import create_if_not_exist
 
 from handlers import create_char, guide, next_game, start, roll, spell_search, feat_search
 from handlers.statistics import stats_command, on_csv_button

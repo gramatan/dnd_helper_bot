@@ -10,7 +10,7 @@ async def set_game(message: types.Message):
     chat_id = message.chat.id
     game_info = message.text[5:]  # Removes the '/set ' part
 
-    conn = sqlite3.connect('dnd_bot.db')
+    conn = sqlite3.connect('db/dnd_bot.db')
     c = conn.cursor()
 
     # Insert or update game_info
@@ -27,7 +27,7 @@ async def get_game(message: types.Message):
     handler_name.set("Get game")
     chat_id = message.chat.id
 
-    conn = sqlite3.connect('dnd_bot.db')
+    conn = sqlite3.connect('db/dnd_bot.db')
     c = conn.cursor()
 
     # Retrieve game_info
