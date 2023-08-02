@@ -41,7 +41,8 @@ Try it here:
 ## Deployment
 
 1) Build a Docker image using `docker build -t my_dnd_bot .`.
-2) Run a Docker container from the image using `docker run -d --restart unless-stopped my_dnd_bot`.
+2) Create volumes for the bot's data using `docker volume create my_dnd_bot_db`.
+3) Run a Docker container from the image using `docker run -v my_dnd_bot_db:/app/db -d --restart unless-stopped my_dnd_bot`.
 
 ## Updating the Bot
 
@@ -78,7 +79,8 @@ For example:
 docker load -i my_dnd_bot.tar
 ```
 
-After this, you can use `docker run` to start a container from the image, just as you would if you had built the image on that machine.
+After this, you can use `docker run` to start a container from the image, 
+just as you would if you had built the image on that machine. Don't forget about volumes if you have them.
 
 ---
 
