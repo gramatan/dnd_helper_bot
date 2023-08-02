@@ -1,17 +1,22 @@
 import sqlite3
+import logging
 
 from datetime import datetime, timedelta
 
 
 def log_message(message):
     from bot import handler_name
-    conn = sqlite3.connect('dnd_bot.db')
-    c = conn.cursor()
-    is_private = 1 if message.chat.id > 0 else 0
-    c.execute("INSERT INTO logs VALUES (?, ?, ?, ?)", (str(datetime.now()), message.from_user.id,
-                                                       int(is_private), handler_name.get()))
-    conn.commit()
-    conn.close()
+    handler = handler_name.get()
+    if handler != '' and handler != 'Stats':
+        conn = sqlite3.connect('dnd_bot.db')
+        c = conn.cursor()
+        is_private = 1 if message.chat.id > 0 else 0
+
+        c.execute("INSERT INTO logs VALUES (?, ?, ?, ?)", (str(datetime.now()), message.from_user.id,
+                                                           int(is_private), handler))
+        conn.commit()
+        conn.close()
+        logging.debug(f"Message logged: {message.text}, handler: {handler}")
 
 
 def get_week_stats():

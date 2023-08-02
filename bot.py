@@ -10,16 +10,13 @@ API_TOKEN = TOKEN   # your telegram bot token
 # logging.basicConfig(level=logging.DEBUG)
 logging.basicConfig(level=logging.INFO)
 
-ignore_log = ContextVar("ignore_log", default=False)
 handler_name = ContextVar("handler_name", default="")
 
 
 class LoggingMiddleware(BaseMiddleware):
     async def on_post_process_message(self, message: types.Message, *args):
-        if not ignore_log.get():
-            from db.utils import log_message
-            log_message(message)
-            logging.debug(f"Message logged: {message.text}, handler: {handler_name.get()}")
+        from db.utils import log_message
+        log_message(message)
 
 
 # Initialize bot and dispatcher
