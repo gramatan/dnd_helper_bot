@@ -58,7 +58,7 @@ Try it here:
 
 After you've built your Docker image:
 
-1) Use the `docker save` command followed by the `-o` flag, the name of your output .tar file, and the name of your image. 
+1) Use the `docker save` command followed by the `-o` flag, the name of your output .tar file, and the name of your image.
 
 For example, if your image is named "my_dnd_bot", the command would look like this:
 
@@ -79,7 +79,7 @@ For example:
 docker load -i my_dnd_bot.tar
 ```
 
-After this, you can use `docker run` to start a container from the image, 
+After this, you can use `docker run` to start a container from the image,
 just as you would if you had built the image on that machine. Don't forget about volumes if you have them.
 
 ---

@@ -1,12 +1,19 @@
 import random
+from typing import Any
 
-from utils.masterdata import CLASSIC_ITEMS, EXTENDED_ITEMS, CLASS_LINK, RACE_LINK, STORY_LINK
+from utils.masterdata import (
+    CLASS_LINK,
+    CLASSIC_ITEMS,
+    EXTENDED_ITEMS,
+    RACE_LINK,
+    STORY_LINK,
+)
 from utils.roll_utils import dx_roll
 
-user_choices = {}  # global variable to store current user choices for character creation
+user_choices: dict[Any, Any] = {}  # global variable to store current user choices for character creation
 
 
-def select_item(choices, user_choice):
+def select_item(choices: dict[Any, Any], user_choice: str):
     # Check if user choice exists and is valid
     if user_choice and user_choice in choices:
         item_link = choices[user_choice]
@@ -27,13 +34,13 @@ def make_character(char_class='', char_race='', char_story='', classic=False) ->
     story_link = STORY_LINK + story_link + '/'
 
     return (
-        f"[{char_class}]({class_link})\n"
-        f"[{char_race}]({race_link})\n"
-        f"[{char_story}]({story_link})\n"
+        f'[{char_class}]({class_link})\n'
+        f'[{char_race}]({race_link})\n'
+        f'[{char_story}]({story_link})\n'
     )
 
 
-def generate_current_settings_message(chat_id):
+def generate_current_settings_message(chat_id: int):
     user_choice = user_choices.get(chat_id, {})
     preset = user_choice.get('preset', 'Классика')
     char_class = user_choice.get('char_class', 'Случайно')
@@ -42,22 +49,22 @@ def generate_current_settings_message(chat_id):
     num_chars = user_choice.get('num_chars', 3)
 
     return (
-        f"Время создать персонажа! Текущие параметры:\n"
-        f"Пресет: {preset}\n"
-        f"Класс: {char_class}\n"
-        f"Раса: {char_race}\n"
-        f"Предыстория: {char_story}\n"
-        f"Количество персонажей: {num_chars}\n"
+        f'Время создать персонажа! Текущие параметры:\n'
+        f'Пресет: {preset}\n'
+        f'Класс: {char_class}\n'
+        f'Раса: {char_race}\n'
+        f'Предыстория: {char_story}\n'
+        f'Количество персонажей: {num_chars}\n'
     )
 
 
-def reset_user_settings(chat_id):
+def reset_user_settings(chat_id: int):
     user_choices[chat_id] = {
-        "preset": "Классика",
-        "char_class": "Случайно",
-        "char_race": "Случайно",
-        "char_story": "Случайно",
-        "num_chars": 3
+        'preset': 'Классика',
+        'char_class': 'Случайно',
+        'char_race': 'Случайно',
+        'char_story': 'Случайно',
+        'num_chars': 3
     }
 
 
@@ -94,10 +101,8 @@ class Character:
         if att in self._attributes:
             self._attributes[att] = val
         else:
-            raise ValueError(f"Характеристики {att} не существует.")
+            raise ValueError(f'Характеристики {att} не существует.')
 
     def get_att(self):
         """Return all attributes."""
         return self._attributes
-
-

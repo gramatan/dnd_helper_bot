@@ -1,5 +1,5 @@
-import re
 import random
+import re
 
 
 def roll_dice(expression):
@@ -9,7 +9,7 @@ def roll_dice(expression):
 
     # Check for numbers larger than 1000
     if any(int(num) > 1000 for num in re.findall(r'\d+', expression)):
-        return '¯\_(ツ)_/¯ для больших чисел используй /roll'
+        return r'¯\_(ツ)_/¯ для больших чисел используй /roll'
 
     parts = re.findall(r'([+-]?)(\d*)[dD](\d+)?|([+-]\d+)', expression, re.IGNORECASE)
     rolls = []

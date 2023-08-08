@@ -1,17 +1,27 @@
 from aiogram import types
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.exceptions import MessageNotModified
 
-from bot import dp, bot, handler_name
+from bot import bot, handler_name
 from keyboards.keyboard import character_creation_keyboard
-from utils.masterdata import CLASSIC_CLASSES, CLASSES, RACES, CLASSIC_RACES, CLASSIC_STORIES, STORIES
-
-from utils.character_creation_utils import reset_user_settings, generate_current_settings_message, user_choices, \
-    make_character
+from utils.character_creation_utils import (
+    generate_current_settings_message,
+    make_character,
+    reset_user_settings,
+    user_choices,
+)
+from utils.masterdata import (
+    CLASSES,
+    CLASSIC_CLASSES,
+    CLASSIC_RACES,
+    CLASSIC_STORIES,
+    RACES,
+    STORIES,
+)
 
 
 async def create_character(message: types.Message):
-    handler_name.set("Create character")
+    handler_name.set('Create character')
     reset_user_settings(message.chat.id)
     answer = generate_current_settings_message(message.chat.id)
     await bot.send_message(
@@ -215,4 +225,3 @@ async def generate(callback_query: types.CallbackQuery):
     characters = '\n---\n'.join(make_character(char_class, race, story, preset == 'Классика') for _ in range(num_chars))
     # Send characters
     await bot.send_message(chat_id, characters, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
-

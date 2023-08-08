@@ -1,7 +1,8 @@
 import logging
+from contextvars import ContextVar
+
 from aiogram import Bot, Dispatcher, types
 from aiogram.dispatcher.middlewares import BaseMiddleware
-from contextvars import ContextVar
 
 from config import TOKEN
 
@@ -10,7 +11,7 @@ API_TOKEN = TOKEN   # your telegram bot token
 # logging.basicConfig(level=logging.DEBUG)
 logging.basicConfig(level=logging.INFO)
 
-handler_name = ContextVar("handler_name", default="")
+handler_name = ContextVar('handler_name', default='')
 
 
 class LoggingMiddleware(BaseMiddleware):

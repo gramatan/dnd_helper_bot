@@ -1,10 +1,12 @@
 import json
-import requests
-from bs4 import BeautifulSoup
 from dataclasses import asdict
+
+import requests  # type: ignore
+from bs4 import BeautifulSoup
 from tqdm import tqdm
 
 from utils.masterdata import FeatCard
+
 
 # This function extracts the necessary data from the feat's page
 def scrape_feat_card_details(url):
@@ -20,26 +22,26 @@ def scrape_feat_card_details(url):
     description = description_div.text.strip()
 
     requirements_li = card_wrapper.find('li', class_='size-type-alignment')
-    requirements = requirements_li.text.strip().replace("Требование: ", "") if requirements_li else None
+    requirements = requirements_li.text.strip().replace('Требование: ', '') if requirements_li else None
 
     source_span = card_wrapper.find('span', class_='source-plaque')
     source = source_span['title'] if source_span else None
 
     # Only save the postfix part of the URL, not the whole URL
-    url_postfix = url.replace("https://dnd.su", "")
+    url_postfix = url.replace('https://dnd.su', '')
 
     return FeatCard(title, url_postfix, title_en, requirements, description, source)
 
 
 def main():
-    url = "https://dnd.su/feats/"
+    url = 'https://dnd.su/feats/'
     resp = requests.get(url)
     soup = BeautifulSoup(resp.text, 'html.parser')
     feats_html = soup.find_all('div', class_='col list-item__spell for_filter')
 
     feat_cards_dict = {}
     for feat_html in tqdm(feats_html):
-        url = "https://dnd.su" + feat_html.a['href']
+        url = 'https://dnd.su' + feat_html.a['href']
         feat_card = scrape_feat_card_details(url)
         feat_cards_dict[feat_card.title.lower()] = asdict(feat_card)
 

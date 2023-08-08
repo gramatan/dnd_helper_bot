@@ -1,8 +1,6 @@
-import logging
 import json
-
+import logging
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
@@ -10,41 +8,43 @@ class BeastCard:
     id: str
     name: str
     url: str
-    danger: Optional[str] = None
-    type: Optional[str] = None
+    danger: str | None = None
+    type: str | None = None
 
 
 @dataclass
 class SpellCard:
-    title: Optional[str] = None
-    title_en: Optional[str] = None
-    link: Optional[str] = None
-    level: Optional[str] = None
-    school: Optional[str] = None
-    level_school: Optional[str] = None
-    casting_time: Optional[str] = None
-    c_range: Optional[str] = None
-    components: Optional[str] = None
-    duration: Optional[str] = None
-    classes: Optional[str] = None
-    archetypes: Optional[str] = None
-    source: Optional[str] = None
-    description: Optional[str] = None
-    id: Optional[int] = None
+    title: str | None = None
+    title_en: str | None = None
+    link: str | None = None
+    level: str | None = None
+    school: str | None = None
+    level_school: str | None = None
+    casting_time: str | None = None
+    c_range: str | None = None
+    components: str | None = None
+    duration: str | None = None
+    classes: str | None = None
+    archetypes: str | None = None
+    source: str | None = None
+    description: str | None = None
+    id: int | None = None
+
 
 @dataclass
 class FeatCard:
-    title: Optional[str] = None
-    link: Optional[str] = None
-    title_en: Optional[str] = None
-    requirements: Optional[str] = None
-    description: Optional[str] = None
-    source: Optional[str] = None
-    id: Optional[int] = None
+    title: str | None = None
+    link: str | None = None
+    title_en: str | None = None
+    requirements: str | None = None
+    description: str | None = None
+    source: str | None = None
+    id: int | None = None
+
 
 def load_beasts(path: str = 'beasts.json') -> dict:
     try:
-        with open(path, 'r', encoding='utf-8') as f:
+        with open(path, encoding='utf-8') as f:
             data = json.load(f)
 
         beast_cards = {k: BeastCard(**v) for k, v in data.items()}
@@ -56,10 +56,10 @@ def load_beasts(path: str = 'beasts.json') -> dict:
 
 def load_spells(path: str = 'spells.json') -> dict:
     try:
-        with open(path, 'r', encoding='utf-8') as f:
+        with open(path, encoding='utf-8') as f:
             data = json.load(f)
 
-        spell_cards = {i+1: SpellCard(**{k: v for k, v in card.items() if k != 'id'}, id=i+1)
+        spell_cards = {i + 1: SpellCard(**{k: v for k, v in card.items() if k != 'id'}, id=i + 1)
                        for i, card in enumerate(data.values())}
     except FileNotFoundError:
         logging.warning(f'Spells upload failed! File {path} not found')
@@ -69,10 +69,10 @@ def load_spells(path: str = 'spells.json') -> dict:
 
 def load_feats(path: str = 'feats.json') -> dict:
     try:
-        with open(path, 'r', encoding='utf-8') as f:
+        with open(path, encoding='utf-8') as f:
             data = json.load(f)
 
-        feat_cards = {i+1: FeatCard(**{k: v for k, v in card.items() if k != 'id'}, id=i+1)
+        feat_cards = {i + 1: FeatCard(**{k: v for k, v in card.items() if k != 'id'}, id=i + 1)
                       for i, card in enumerate(data.values())}
     except FileNotFoundError:
         logging.warning(f'Feats upload failed! File {path} not found')

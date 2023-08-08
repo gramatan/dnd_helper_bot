@@ -13,4 +13,3 @@ def character_creation_keyboard():
         InlineKeyboardButton('Создать', callback_data='generate'),
     )
     return keyboard
-

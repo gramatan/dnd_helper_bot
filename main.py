@@ -6,10 +6,17 @@ import handlers.bestiary_search
 from bot import dp
 from config import ADMIN_ID
 from database.db import create_if_not_exist
-
-from handlers import create_char, guide, next_game, start, roll, spell_search, feat_search
-from handlers.statistics import stats_command, on_csv_button
-from utils.masterdata import load_spells, load_feats, load_beasts
+from handlers import (
+    create_char,
+    feat_search,
+    guide,
+    next_game,
+    roll,
+    spell_search,
+    start,
+)
+from handlers.statistics import on_csv_button, stats_command
+from utils.masterdata import load_beasts, load_feats, load_spells
 
 create_if_not_exist()
 spell_cards = load_spells('utils/spells.json')

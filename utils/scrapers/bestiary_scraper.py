@@ -1,17 +1,18 @@
-import time
 import json
+import time
 
-from selenium import webdriver
 from bs4 import BeautifulSoup
+from selenium import webdriver
+
 from utils.masterdata import BeastCard
 
 
 def scroll_to_end_of_page(driver):
     while True:
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
         time.sleep(2)
-        new_height = driver.execute_script("return document.body.scrollHeight")
-        if new_height == driver.execute_script("return document.body.scrollHeight"):
+        new_height = driver.execute_script('return document.body.scrollHeight')
+        if new_height == driver.execute_script('return document.body.scrollHeight'):
             break
 
 
@@ -52,5 +53,5 @@ def main():
     write_to_file(beasts_dict)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

@@ -1,6 +1,5 @@
 import logging
 import os
-
 import sqlite3
 from contextlib import contextmanager
 
@@ -30,8 +29,8 @@ def create_if_not_exist():
         with database_connection(commit=True) as cursor:
             # Create table logs
             cursor.execute(
-                '''CREATE TABLE IF NOT EXISTS logs 
+                '''CREATE TABLE IF NOT EXISTS logs
                 (date text, user_id text, is_private integer, text text)''')
-        logging.info("Database created successfully")
+        logging.info('Database created successfully')
     except Exception as e:
-        print(f"Error occurred: {e}")
+        print(f'Error occurred: {e}')
