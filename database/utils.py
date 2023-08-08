@@ -6,7 +6,6 @@ from aiogram import types
 from database.db import database_connection
 
 
-# todo: add typings
 def log_message(message: types.Message):
     from bot import handler_name
     handler = handler_name.get()
