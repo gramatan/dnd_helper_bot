@@ -1,17 +1,29 @@
-# Use an official Python runtime as a parent image
-FROM python:3.11-slim
+FROM python:3.11-slim AS compile-image
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends build-essential gcc
 
-# Set the working directory in the container to /app
+RUN python -m venv /opt/venv
+
+ENV PATH="/opt/venv/bin:$PATH"
+
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+FROM python:3.11-slim AS build-image
+
+COPY --from=compile-image /opt/venv /app/venv
+
+ENV PATH="/app/venv/bin:$PATH"
+
 WORKDIR /app
 
-# Add current directory files (/app on the host) to work directory in the container
-ADD . /app
+COPY /database/ ./database/
+COPY /db/ ./db/
+COPY /handlers/ ./handlers/
+COPY /keyboards/ ./keyboards/
+COPY /utils/ ./utils/
+COPY bot.py .
+COPY main.py .
+COPY config.py .
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Make port 80 available to the world outside this container
-EXPOSE 80
-
-# Run bot.py when the container launches
 CMD ["python", "main.py"]
