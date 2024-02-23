@@ -18,6 +18,7 @@ Try it here:
 
 - **Random character creation**: Use the `/create_character` command, follow the prompted button setup, and generate your character.
 - **Dice rolling**: The bot can roll a dice with a specified number of sides. Use the command `/roll N`, where N is the number of sides on the dice (defaults to 20 if not specified).
+- **Roll stats for character creation**: Generates character stats by rolling 4d6 dice for each stat, discarding the lowest die each time. Use `/roll_stats` or `/roll_stats N` for N sets of rolls, choosing the set with the highest sum.
 - **Advanced dice rolling**: Use the format `NdM+K`, where N is the number of dice, M is the number of sides per dice, and K is an optional modifier.
 - **Game scheduling**: Use `/set` followed by your text to save information about your next game. Use `/game` to retrieve this information.
 - **Information lookup**: Use `/spell`, `/class`, `/item`, `/bestiary`, `/feat` and `/mech` commands followed by their respective search term to get relevant information. If the item is found in the bot's database, it will provide a detailed description; otherwise, it will return a link to the DnD resource for further searching.

@@ -26,3 +26,28 @@ async def dice_roll(message: types.Message):
         handler_name.set('Auto')
         results = [f'{request}: {roll_dice(request)}' for request in requests]
         await message.reply('\n'.join(results))
+
+
+async def stats_roll(message: types.Message):
+    try:
+        repeats = int(message.text.split()[1])
+    except (IndexError, ValueError):
+        repeats = 1
+
+    best_stats = []
+    best_sum = 0
+
+    for _ in range(repeats):
+        stats = []
+        for _ in range(6):
+            rolls = sorted([dx_roll(6)[0] for _ in range(4)], reverse=True)[:3]
+            stats.append(sum(rolls))
+
+        current_sum = sum(stats)
+        if current_sum > best_sum:
+            best_sum = current_sum
+            best_stats = stats
+
+    answer = f'Лучшие характеристики после {repeats} попыток: \n {best_stats}'
+
+    await message.reply(answer)
