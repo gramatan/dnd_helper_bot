@@ -17,13 +17,13 @@ ENV PATH="/app/venv/bin:$PATH"
 
 WORKDIR /app
 
-COPY /database/ ./database/
-COPY /db/ ./db/
-COPY /handlers/ ./handlers/
-COPY /keyboards/ ./keyboards/
-COPY /utils/ ./utils/
-COPY bot.py .
-COPY main.py .
-COPY config.py .
+COPY src/database/ ./database/
+COPY src/db/ ./db/
+COPY src/handlers/ ./handlers/
+COPY src/keyboards/ ./keyboards/
+COPY src/utils/ ./utils/
+COPY src/bot.py .
+COPY src/main.py .
+COPY src/config.py .
 
 CMD ["python", "main.py"]
