@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app:
-    build: .
+    image: my_dnd_bot:0.5.0
     restart: unless-stopped
     volumes:
       - db-data:/app/db
