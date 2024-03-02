@@ -16,8 +16,10 @@ handler_name = ContextVar('handler_name', default='')
 
 class LoggingMiddleware(BaseMiddleware):
     async def on_post_process_message(self, message: types.Message, *args):
-        from database.utils import log_message
+        from database.utils import log_message, save_user
         log_message(message)
+        save_user(message.from_user.id)
+
 
 
 # Initialize bot and dispatcher

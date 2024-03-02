@@ -32,5 +32,9 @@ def create_if_not_exist():
                 '''CREATE TABLE IF NOT EXISTS logs
                 (date text, user_id text, is_private integer, text text)''')
         logging.info('Database created successfully')
-    except Exception as e:
-        print(f'Error occurred: {e}')
+        with database_connection(commit=True) as cursor:
+            cursor.execute(
+                '''CREATE TABLE IF NOT EXISTS users
+                   (user_id INTEGER PRIMARY KEY, is_subscribed INTEGER)''')
+    except Exception as ex:
+        logging.warning(f'Error occurred: {ex}')

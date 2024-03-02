@@ -77,7 +77,7 @@ def register_handlers(dp):
     dp.register_callback_query_handler(create_char.generate, lambda c: c.data == 'generate')
 
     dp.register_message_handler(stats_command, commands=['stats'], user_id=ADMIN_ID)
-    dp.register_callback_query_handler(on_csv_button)
+    dp.register_callback_query_handler(on_csv_button, lambda c: c.data.startswith('statistics_'))
 
     dp.register_message_handler(roll.roll_dice_command, commands=['roll'])
     dp.register_message_handler(roll.stats_roll, commands=['roll_stats'])

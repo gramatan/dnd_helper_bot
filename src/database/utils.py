@@ -18,6 +18,12 @@ def log_message(message: types.Message):
             logging.debug(f'Message logged: {message.text}, handler: {handler}')
 
 
+def get_unique_users_count():
+    with database_connection() as cursor:
+        cursor.execute("SELECT COUNT(*) FROM users")
+        count = cursor.fetchone()[0]
+    return count
+
 def get_week_stats():
     with database_connection() as cursor:
         week_ago = datetime.now() - timedelta(days=7)
@@ -75,3 +81,18 @@ def db_get_game(chat_id: int):
         cursor.execute('SELECT game_info FROM games WHERE chat_id = ?', (chat_id,))
         game_info = cursor.fetchone()
     return game_info
+
+
+def get_users():
+    with database_connection() as cursor:
+        cursor.execute("SELECT user_id FROM users WHERE is_subscribed = 1")
+        return [row[0] for row in cursor.fetchall()]
+
+
+def save_user(user_id, is_subscribed=True):
+    try:
+        with database_connection(commit=True) as cursor:
+            cursor.execute("INSERT OR REPLACE INTO users (user_id, is_subscribed) VALUES (?, ?)",
+                           (user_id, int(is_subscribed)))
+    except Exception as ex:
+        logging.exception(f'Failed to save or update user information')
