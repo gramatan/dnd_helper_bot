@@ -16,6 +16,12 @@ from handlers import (
     start,
 )
 from handlers.statistics import on_csv_button, stats_command
+from handlers.broadcaster import (
+    start_broadcast_command,
+    message_handler,
+    BroadcastStates,
+    broadcast_callback_handler,
+)
 from utils.masterdata import load_beasts, load_feats, load_spells
 
 create_if_not_exist()
@@ -26,23 +32,21 @@ logging.info('Spells, feats and beasts loaded')
 
 
 def register_handlers(dp):
-    dp.register_message_handler(start.start_message, commands=['start'])
-    dp.register_message_handler(start.help_message, commands=['help'])
-    dp.register_message_handler(next_game.set_game, commands=['set'])
-    dp.register_message_handler(next_game.get_game, commands=['game'])
-    dp.register_message_handler(guide.class_search, commands=['class'])
-    dp.register_message_handler(guide.mech_search, commands=['mech'])
-    dp.register_message_handler(guide.item_search, commands=['item'])
-    dp.register_message_handler(create_char.create_character, commands=['create_character'])
-
-    dp.register_message_handler(handlers.bestiary_search.bestiary_search, commands=['bestiary'])
-    dp.register_callback_query_handler(handlers.bestiary_search.beast_callback_query,
-                                       lambda call: call.data.startswith('beast_'))
-
-    dp.register_message_handler(spell_search.spell_search, commands=['spell'])
+    dp.register_message_handler(
+        start_broadcast_command,
+        commands=['broadcast'],
+        state="*",
+        user_id=ADMIN_ID,
+    )
+    dp.register_message_handler(
+        message_handler,
+        state=BroadcastStates.waiting_for_message,
+        user_id=ADMIN_ID,
+    )
     dp.register_callback_query_handler(
-        spell_search.spell_callback_query,
-        lambda call: call.data.startswith('spell_'),
+        broadcast_callback_handler,
+        lambda query: query.data in ['broadcast_send', 'broadcast_cancel'],
+        state='*'
     )
 
     dp.register_message_handler(start.start_message, commands=['start'])

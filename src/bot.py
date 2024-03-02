@@ -2,6 +2,7 @@ import logging
 from contextvars import ContextVar
 
 from aiogram import Bot, Dispatcher, types
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher.middlewares import BaseMiddleware
 
 from config import TOKEN
@@ -21,8 +22,8 @@ class LoggingMiddleware(BaseMiddleware):
         save_user(message.from_user.id)
 
 
-
-# Initialize bot and dispatcher
+# Initialize storage, bot and dispatcher
+storage = MemoryStorage()
 bot = Bot(token=API_TOKEN)
-dp = Dispatcher(bot)
+dp = Dispatcher(bot, storage=storage)
 dp.middleware.setup(LoggingMiddleware())
