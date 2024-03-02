@@ -18,7 +18,6 @@ ENV PATH="/app/venv/bin:$PATH"
 WORKDIR /app
 
 COPY src/database/ ./database/
-COPY src/db/ ./db/
 COPY src/handlers/ ./handlers/
 COPY src/keyboards/ ./keyboards/
 COPY src/utils/ ./utils/

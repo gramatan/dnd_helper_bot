@@ -41,17 +41,20 @@ Try it here:
 
 ## Deployment
 
-1) Build a Docker image using `docker build -t my_dnd_bot .`.
-2) Create volumes for the bot's data using `docker volume create my_dnd_bot_db`.
-3) Run a Docker container from the image using `docker run -v my_dnd_bot_db:/app/db -d --restart unless-stopped my_dnd_bot`.
+Для развертывания приложения используйте Docker Compose:
+
+1. Склонируйте репозиторий и перейдите в его директорию.
+2. Запустите приложение с помощью Docker Compose:
+
+```bash
+docker-compose up -d
+```
 
 ## Updating the Bot
 
 1) Make changes to your source files.
 2) If changes were made to the data scraping script, run it again with `python utils/spells_scraper.py` to update your spells.json file.
-3) Rebuild the Docker image with `docker build --no-cache -t my_dnd_bot .`.
-4) Stop and remove the old container using `docker rm -f <container_id>`.
-5) Run a new container from the updated image.
+3) Rebuild the Docker image and start bot with `docker-compose up -d --build`.
 
 ## Moving the Container
 
@@ -80,7 +83,7 @@ For example:
 docker load -i my_dnd_bot.tar
 ```
 
-After this, you can use `docker run` to start a container from the image,
+After this, you can use `docker-compose up -d` to start a container from the image,
 just as you would if you had built the image on that machine. Don't forget about volumes if you have them.
 
 ---
