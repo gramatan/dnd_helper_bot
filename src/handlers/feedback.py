@@ -47,6 +47,8 @@ async def get_feedback(message: types.Message):
             reply_markup=keyboard,
             disable_notification=True,
         )
+        await message.reply(f'Сообщение отправлено.\n{message.text}')
+        await message.delete()
 
 
 async def feedback_callback_handler(query: types.CallbackQuery, state: FSMContext):
