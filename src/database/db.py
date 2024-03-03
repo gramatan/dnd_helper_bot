@@ -36,5 +36,9 @@ def create_if_not_exist():
             cursor.execute(
                 '''CREATE TABLE IF NOT EXISTS users
                    (user_id INTEGER PRIMARY KEY, is_subscribed INTEGER)''')
+        with database_connection(commit=True) as cursor:
+            cursor.execute(
+                '''CREATE TABLE IF NOT EXISTS prayers
+                   (user_id INTEGER PRIMARY KEY, blocked INTEGER)''')
     except Exception as ex:
         logging.warning(f'Error occurred: {ex}')

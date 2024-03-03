@@ -96,3 +96,21 @@ def save_user(user_id, is_subscribed=True):
                            (user_id, int(is_subscribed)))
     except Exception as ex:
         logging.exception(f'Failed to save or update user information')
+
+
+def add_or_check_user_prayer(user_id):
+    with database_connection(commit=True) as cursor:
+        cursor.execute("SELECT blocked FROM prayers WHERE user_id = ?", (user_id,))
+        result = cursor.fetchone()
+        if result is None:
+            cursor.execute("INSERT INTO prayers (user_id, blocked) VALUES (?, 0)", (user_id,))
+            return "new_user"
+        elif result[0] == 1:
+            return "blocked_user"
+        else:
+            return "existing_user"
+
+
+def block_user_prayer(user_id):
+    with database_connection(commit=True) as cursor:
+        cursor.execute("UPDATE prayers SET blocked = 1 WHERE user_id = ?", (user_id,))

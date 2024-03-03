@@ -15,6 +15,12 @@ from handlers import (
     spell_search,
     start,
 )
+from handlers.feedback import (
+    get_feedback,
+    feedback_callback_handler,
+    feedback_reply_message_handler,
+    FeedbackStates,
+)
 from handlers.statistics import on_csv_button, stats_command
 from handlers.broadcaster import (
     start_broadcast_command,
@@ -45,10 +51,22 @@ def register_handlers(dp):
     )
     dp.register_callback_query_handler(
         broadcast_callback_handler,
-        lambda query: query.data in ['broadcast_send', 'broadcast_cancel'],
+        lambda query: query.data.startswith('broadcast_'),
         state='*'
     )
-
+    dp.register_message_handler(
+        get_feedback,
+        commands=['feedback'],
+    )
+    dp.register_callback_query_handler(
+        feedback_callback_handler,
+        lambda query: query.data.startswith('feedback_'),
+        state="*",
+    )
+    dp.register_message_handler(
+        feedback_reply_message_handler,
+        state=FeedbackStates.waiting_for_message,
+    )
     dp.register_message_handler(start.start_message, commands=['start'])
     dp.register_message_handler(start.help_message, commands=['help'])
     dp.register_message_handler(next_game.set_game, commands=['set'])

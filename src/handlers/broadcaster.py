@@ -5,10 +5,11 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from aiogram.utils import exceptions
 
 from bot import bot
+from config import ADMIN_ID
 from database.utils import get_users
+from utils.message_sender import send_message
 
 
 class BroadcastStates(StatesGroup):
@@ -33,27 +34,6 @@ async def message_handler(message: types.Message, state: FSMContext):
         await message.answer(f"message:\n\n{message.text}", reply_markup=keyboard)
 
 
-async def send_message(user_id: int, text: str, disable_notification: bool = True) -> bool:
-    try:
-        await bot.send_message(user_id, text, disable_notification=disable_notification)
-    except exceptions.BotBlocked:
-        logging.error(f"Target [ID:{user_id}]: blocked by user")
-    except exceptions.ChatNotFound:
-        logging.error(f"Target [ID:{user_id}]: invalid user ID")
-    except exceptions.RetryAfter as e:
-        logging.error(f"Target [ID:{user_id}]: Flood limit is exceeded. Sleep {e.timeout} seconds.")
-        await asyncio.sleep(e.timeout)
-        return await send_message(user_id, text)
-    except exceptions.UserDeactivated:
-        logging.error(f"Target [ID:{user_id}]: user is deactivated")
-    except exceptions.TelegramAPIError:
-        logging.exception(f"Target [ID:{user_id}]: failed")
-    else:
-        logging.info(f"Target [ID:{user_id}]: success")
-        return True
-    return False
-
-
 async def broadcaster(message: str) -> int:
     count = 0
     users = get_users()
@@ -71,6 +51,8 @@ async def broadcast_callback_handler(query: types.CallbackQuery, state: FSMConte
         if 'broadcast_message' in data:
             count = await broadcaster(data['broadcast_message'])
             await query.message.answer(f'Broadcast done for {count} users.')
+            await bot.delete_message(chat_id=ADMIN_ID, message_id=query.message.message_id)
     elif query.data == 'broadcast_cancel':
         await query.message.answer("Broadcast canceled.")
+        await bot.delete_message(chat_id=ADMIN_ID, message_id=query.message.message_id)
     await state.finish()
