@@ -46,10 +46,11 @@ Try it here:
 To deploy the application using Docker Compose:
 
 1. Clone the repository and navigate to its directory.
-2. Run the application using Docker Compose:
+2. Fill your config.py with `TOKEN` and `ADMIN_ID` variables.
+3. Run the application using Docker Compose:
 
    ```bash
-   docker build -t my_dnd_bot:0.5.0 .
+   docker build -t my_dnd_bot:0.5.1 .
    docker-compose up -d
    ```
    
