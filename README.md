@@ -40,11 +40,6 @@ Try it here:
 6) Run the data scraping script using `python utils/spells_scraper.py` and `python utils/feats_scraper.py`. This will populate your spells.json and feats files. You don't need to do this every time. Just use the file provided.
 7) Run the bot using `python main.py`.
 
-Для запуска бота на локальной машине с учётом изменений и без них, вам потребуется немного отличающийся подход. Если вы вносили изменения в исходный код, вам нужно пересобрать образ перед запуском. Если изменений не было, вы можете просто запустить бота с существующим образом.
-
-Вот обновленный раздел README на английском языке:
-
----
 
 ## Deployment
 
