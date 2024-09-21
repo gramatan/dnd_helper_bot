@@ -1,12 +1,12 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from aiogram.dispatcher.filters.state import StatesGroup, State
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.dispatcher.filters.state import State, StatesGroup
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
+from dnd_helper.bot import bot, handler_name
+from dnd_helper.config import ADMIN_ID
 from dnd_helper.database.utils import add_or_check_user_prayer, block_user_prayer
 from dnd_helper.utils.message_sender import send_message
-from dnd_helper.bot import handler_name, bot
-from dnd_helper.config import ADMIN_ID
 
 
 class FeedbackStates(StatesGroup):

@@ -1,11 +1,11 @@
 import logging
 
 from aiogram import executor
-
 from bot import dp
 from config import ADMIN_ID
 from database.db import create_if_not_exist
 from handlers import (
+    bestiary_search,
     create_char,
     feat_search,
     guide,
@@ -14,19 +14,19 @@ from handlers import (
     spell_search,
     start,
 )
-from handlers.feedback import (
-    get_feedback,
-    feedback_callback_handler,
-    feedback_reply_message_handler,
-    FeedbackStates,
-)
-from handlers.statistics import on_csv_button, stats_command
 from handlers.broadcaster import (
-    start_broadcast_command,
-    message_handler,
     BroadcastStates,
     broadcast_callback_handler,
+    message_handler,
+    start_broadcast_command,
 )
+from handlers.feedback import (
+    FeedbackStates,
+    feedback_callback_handler,
+    feedback_reply_message_handler,
+    get_feedback,
+)
+from handlers.statistics import on_csv_button, stats_command
 from utils.masterdata import load_beasts, load_feats, load_spells
 
 create_if_not_exist()
@@ -75,9 +75,9 @@ def register_handlers(dp):
     dp.register_message_handler(guide.item_search, commands=['item'])
     dp.register_message_handler(create_char.create_character, commands=['create_character'])
 
-    dp.register_message_handler(dnd_helper.handlers.bestiary_search.bestiary_search, commands=['bestiary'])
+    dp.register_message_handler(bestiary_search.bestiary_search, commands=['bestiary'])
     dp.register_callback_query_handler(
-        dnd_helper.handlers.bestiary_search.beast_callback_query,
+        bestiary_search.beast_callback_query,
         lambda call: call.data.startswith('beast_'),
     )
     dp.register_message_handler(spell_search.spell_search, commands=['spell'])

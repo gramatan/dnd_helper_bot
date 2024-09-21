@@ -9,7 +9,7 @@ from dnd_helper.bot import bot
 
 
 async def send_message(
-        user_id: int,
+        user_id: int | str,
         text: str,
         parse_mode: types.ParseMode = None,
         reply_markup: InlineKeyboardMarkup = None,

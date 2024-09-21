@@ -13,8 +13,12 @@ def log_message(message: types.Message):
         with database_connection(commit=True) as cursor:
             is_private = 1 if message.chat.id > 0 else 0
 
-            cursor.execute('INSERT INTO logs VALUES (?, ?, ?, ?)', (str(datetime.now()), message.from_user.id,
-                                                                    int(is_private), handler))
+            cursor.execute('INSERT INTO logs VALUES (?, ?, ?, ?)', (
+                str(datetime.now()),
+                message.from_user.id,
+                int(is_private),
+                handler,
+            ))
             logging.debug(f'Message logged: {message.text}, handler: {handler}')
 
 
@@ -23,6 +27,7 @@ def get_unique_users_count():
         cursor.execute("SELECT COUNT(*) FROM users")
         count = cursor.fetchone()[0]
     return count
+
 
 def get_week_stats():
     with database_connection() as cursor:

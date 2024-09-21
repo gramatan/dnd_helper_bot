@@ -8,8 +8,8 @@ from dnd_helper.bot import handler_name
 from dnd_helper.database.utils import (
     get_month_stats,
     get_top_5_requests,
-    get_week_stats,
     get_unique_users_count,
+    get_week_stats,
 )
 
 
@@ -29,6 +29,7 @@ def export_logs_to_csv():
 
     return 'logs.csv'
 
+
 def export_users_to_csv():
     conn = sqlite3.connect('db/dnd_bot.db')
     c = conn.cursor()
@@ -44,6 +45,7 @@ def export_users_to_csv():
     conn.close()
 
     return 'users.csv'
+
 
 async def stats_command(message: types.Message):
     handler_name.set('Stats')

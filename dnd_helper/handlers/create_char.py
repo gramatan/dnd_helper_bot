@@ -225,4 +225,9 @@ async def generate(callback_query: types.CallbackQuery):
     # Generate characters
     characters = '\n---\n'.join(make_character(char_class, race, story, preset == 'Классика') for _ in range(num_chars))
     # Send characters
-    await dnd_helper.utils.message_sender.send_message(chat_id, characters, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
+    await dnd_helper.utils.message_sender.send_message(
+        chat_id,
+        characters,
+        parse_mode=types.ParseMode.MARKDOWN,
+        disable_web_page_preview=True,  # type: ignore
+    )
