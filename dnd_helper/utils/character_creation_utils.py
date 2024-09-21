@@ -1,14 +1,14 @@
 import random
 from typing import Any
 
-from utils.masterdata import (
+from dnd_helper.utils.masterdata import (
     CLASS_LINK,
     CLASSIC_ITEMS,
     EXTENDED_ITEMS,
     RACE_LINK,
     STORY_LINK,
 )
-from utils.roll_utils import dx_roll
+from dnd_helper.utils.roll_utils import dx_roll
 
 user_choices: dict[Any, Any] = {}  # global variable to store current user choices for character creation
 

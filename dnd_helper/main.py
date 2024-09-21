@@ -2,7 +2,6 @@ import logging
 
 from aiogram import executor
 
-import handlers.bestiary_search
 from bot import dp
 from config import ADMIN_ID
 from database.db import create_if_not_exist
@@ -76,9 +75,9 @@ def register_handlers(dp):
     dp.register_message_handler(guide.item_search, commands=['item'])
     dp.register_message_handler(create_char.create_character, commands=['create_character'])
 
-    dp.register_message_handler(handlers.bestiary_search.bestiary_search, commands=['bestiary'])
+    dp.register_message_handler(dnd_helper.handlers.bestiary_search.bestiary_search, commands=['bestiary'])
     dp.register_callback_query_handler(
-        handlers.bestiary_search.beast_callback_query,
+        dnd_helper.handlers.bestiary_search.beast_callback_query,
         lambda call: call.data.startswith('beast_'),
     )
     dp.register_message_handler(spell_search.spell_search, commands=['spell'])

@@ -2,16 +2,16 @@ from aiogram import types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.exceptions import MessageNotModified
 
-import utils.message_sender
-from bot import bot, handler_name
-from keyboards.keyboard import character_creation_keyboard
-from utils.character_creation_utils import (
+import dnd_helper.utils.message_sender
+from dnd_helper.bot import bot, handler_name
+from dnd_helper.keyboards.keyboard import character_creation_keyboard
+from dnd_helper.utils.character_creation_utils import (
     generate_current_settings_message,
     make_character,
     reset_user_settings,
     user_choices,
 )
-from utils.masterdata import (
+from dnd_helper.utils.masterdata import (
     CLASSES,
     CLASSIC_CLASSES,
     CLASSIC_RACES,
@@ -25,7 +25,7 @@ async def create_character(message: types.Message):
     handler_name.set('Create character')
     reset_user_settings(message.chat.id)
     answer = generate_current_settings_message(message.chat.id)
-    await utils.message_sender.send_message(
+    await dnd_helper.utils.message_sender.send_message(
         message.chat.id,
         answer,
         reply_markup=character_creation_keyboard()
@@ -225,4 +225,4 @@ async def generate(callback_query: types.CallbackQuery):
     # Generate characters
     characters = '\n---\n'.join(make_character(char_class, race, story, preset == 'Классика') for _ in range(num_chars))
     # Send characters
-    await utils.message_sender.send_message(chat_id, characters, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)
+    await dnd_helper.utils.message_sender.send_message(chat_id, characters, parse_mode=types.ParseMode.MARKDOWN, disable_web_page_preview=True)

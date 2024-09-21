@@ -5,7 +5,7 @@ import requests  # type: ignore
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 
-from utils.masterdata import FeatCard
+from dnd_helper.utils.masterdata import FeatCard
 
 
 # This function extracts the necessary data from the feat's page

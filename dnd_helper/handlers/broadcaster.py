@@ -6,10 +6,10 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from bot import bot
-from config import ADMIN_ID
-from database.utils import get_users
-from utils.message_sender import send_message
+from dnd_helper.bot import bot
+from dnd_helper.config import ADMIN_ID
+from dnd_helper.database.utils import get_users
+from dnd_helper.utils.message_sender import send_message
 
 
 class BroadcastStates(StatesGroup):

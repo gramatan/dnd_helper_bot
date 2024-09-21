@@ -5,7 +5,7 @@ from aiogram import types
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils import exceptions
 
-from bot import bot
+from dnd_helper.bot import bot
 
 
 async def send_message(

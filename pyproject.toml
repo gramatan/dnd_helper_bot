@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "dnd-helper"
+version = "0.6.0"
+description = ""
+authors = ["Andrey G <megagran.work@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "~3.11"
+aiogram = "^2.25"
+selenium = "^4.10"
+bs4 = "~0.0.1"
+requests = "^2.31.0"
+tqdm = "^4.65.0"
+fuzzywuzzy = "^0.18.0"
+python-levenshtein = "^0.21.1"
+
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.8.0"
+flake8 = "^7.1.1"
+mypy = "^1.11.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

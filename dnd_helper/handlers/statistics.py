@@ -4,8 +4,8 @@ import sqlite3
 from aiogram import types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from bot import handler_name
-from database.utils import (
+from dnd_helper.bot import handler_name
+from dnd_helper.database.utils import (
     get_month_stats,
     get_top_5_requests,
     get_week_stats,

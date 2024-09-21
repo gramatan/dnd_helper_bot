@@ -2,8 +2,8 @@ import re
 
 from aiogram import types
 
-from bot import handler_name
-from utils.roll_utils import dx_roll, roll_dice
+from dnd_helper.bot import handler_name
+from dnd_helper.utils.roll_utils import dx_roll, roll_dice
 
 
 async def roll_dice_command(message: types.Message):

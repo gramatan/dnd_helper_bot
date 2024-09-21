@@ -3,11 +3,11 @@ from datetime import datetime, timedelta
 
 from aiogram import types
 
-from database.db import database_connection
+from dnd_helper.database.db import database_connection
 
 
 def log_message(message: types.Message):
-    from bot import handler_name
+    from dnd_helper.bot import handler_name
     handler = handler_name.get()
     if handler != '' and handler != 'Stats':
         with database_connection(commit=True) as cursor:
@@ -95,7 +95,7 @@ def save_user(user_id, is_subscribed=True):
             cursor.execute("INSERT OR REPLACE INTO users (user_id, is_subscribed) VALUES (?, ?)",
                            (user_id, int(is_subscribed)))
     except Exception as ex:
-        logging.exception(f'Failed to save or update user information')
+        logging.exception(f'Failed to save or update user information with error: {ex}')
 
 
 def add_or_check_user_prayer(user_id):

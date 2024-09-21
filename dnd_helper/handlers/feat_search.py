@@ -2,7 +2,7 @@ from aiogram import types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from fuzzywuzzy import fuzz
 
-from bot import handler_name
+from dnd_helper.bot import handler_name
 
 
 async def generate_feat_card_details(card):
@@ -20,7 +20,7 @@ async def generate_feat_card_details(card):
 
 async def feat_search(message: types.Message):
     handler_name.set('Feat search')
-    from main import feat_cards
+    from dnd_helper.main import feat_cards
     if len(message.text) < 6:
         await message.reply(
             'Ты забыл ввести слова для поиска после /feat\n'
@@ -57,8 +57,8 @@ async def feat_search(message: types.Message):
 
 
 async def feat_callback_query(call: types.CallbackQuery):
-    from bot import bot
-    from main import feat_cards
+    from dnd_helper.bot import bot
+    from dnd_helper.main import feat_cards
     if call.data.startswith('feat_'):
         feat_id = int(call.data[5:])
         card = feat_cards[feat_id]

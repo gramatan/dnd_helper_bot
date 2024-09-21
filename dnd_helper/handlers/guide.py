@@ -1,6 +1,6 @@
 from aiogram import types
 
-from bot import handler_name
+from dnd_helper.bot import handler_name
 
 
 async def class_search(message: types.Message):

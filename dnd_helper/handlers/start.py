@@ -1,6 +1,6 @@
 from aiogram import types
 
-from bot import handler_name
+from dnd_helper.bot import handler_name
 
 HELP_MESSAGE = (
     'Привет! Я бот, который может помочь в ваших DnD приключениях, бросая кости за вас и предоставляя информацию '

@@ -2,7 +2,7 @@ from aiogram import types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from fuzzywuzzy import fuzz
 
-from bot import handler_name
+from dnd_helper.bot import handler_name
 
 
 async def generate_beast_card_details(card):
@@ -20,7 +20,7 @@ async def generate_beast_card_details(card):
 
 async def bestiary_search(message: types.Message):
     handler_name.set('Bestiary search')
-    from main import beast_cards
+    from dnd_helper.main import beast_cards
     if len(message.text) < 10:
         await message.reply(
             'Ух ты, память как у золотой рыбки! Тебе нужно ввести слова для поиска после /bestiary.\n'
@@ -58,8 +58,8 @@ async def bestiary_search(message: types.Message):
 
 
 async def beast_callback_query(call: types.CallbackQuery):
-    from bot import bot
-    from main import beast_cards
+    from dnd_helper.bot import bot
+    from dnd_helper.main import beast_cards
 
     if call.data.startswith('beast_'):
         beast_id = call.data[6:]

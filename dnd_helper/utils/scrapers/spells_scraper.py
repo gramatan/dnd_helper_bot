@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from tqdm import tqdm
 
-from utils.masterdata import SpellCard
+from dnd_helper.utils.masterdata import SpellCard
 
 
 # Function to scroll through the page and retrieve all data

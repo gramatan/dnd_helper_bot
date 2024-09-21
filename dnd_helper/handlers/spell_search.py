@@ -2,7 +2,7 @@ from aiogram import types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from fuzzywuzzy import fuzz
 
-from bot import handler_name
+from dnd_helper.bot import handler_name
 
 
 async def generate_spell_card_details(card):
@@ -26,7 +26,7 @@ async def generate_spell_card_details(card):
 
 async def spell_search(message: types.Message):
     handler_name.set('Spell search')
-    from main import spell_cards
+    from dnd_helper.main import spell_cards
     if len(message.text) < 8:
         await message.reply(
             'Ты забыл ввести слова для поиска после /spell\n'
@@ -65,8 +65,8 @@ async def spell_search(message: types.Message):
 
 
 async def spell_callback_query(call: types.CallbackQuery):
-    from bot import bot
-    from main import spell_cards
+    from dnd_helper.bot import bot
+    from dnd_helper.main import spell_cards
 
     if call.data.startswith('spell_'):
         spell_id = int(call.data[6:])  # Parse the spell id

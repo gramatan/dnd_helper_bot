@@ -4,7 +4,7 @@ import time
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
-from utils.masterdata import BeastCard
+from dnd_helper.utils.masterdata import BeastCard
 
 
 def scroll_to_end_of_page(driver):

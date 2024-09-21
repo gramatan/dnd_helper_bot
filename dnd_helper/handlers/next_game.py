@@ -1,7 +1,7 @@
 from aiogram import types
 
-from bot import handler_name
-from database.utils import db_get_game, db_set_game
+from dnd_helper.bot import handler_name
+from dnd_helper.database.utils import db_get_game, db_set_game
 
 
 async def set_game(message: types.Message):
