@@ -1,32 +1,37 @@
-FROM python:3.11-slim AS compile-image
-RUN apt-get update
-RUN apt-get install -y --no-install-recommends build-essential gcc curl
+FROM python:3.11-slim AS builder
 
-RUN curl -sSL https://install.python-poetry.org | python3 -
+RUN apt-get update && apt-get install -y \
+    curl \
+    build-essential \
+    && apt-get clean
 
-ENV PATH="/root/.local/bin:$PATH"
+RUN curl -sSL https://install.python-poetry.org | python3 - \
+    && mv /root/.local/bin/poetry /usr/local/bin/poetry
 
-RUN python -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
+WORKDIR /build
 
 COPY pyproject.toml poetry.lock ./
 
-RUN poetry install --no-dev --no-root
+RUN poetry config virtualenvs.create false && poetry install --only main --no-root
 
-FROM python:3.11-slim AS build-image
+COPY dnd_helper dnd_helper
 
-COPY --from=compile-image /opt/venv /app/venv
+FROM python:3.11-slim
 
-ENV PATH="/app/venv/bin:$PATH"
-
+# Устанавливаем рабочую директорию
 WORKDIR /app
 
-COPY dnd_helper/database/ ./database/
-COPY dnd_helper/handlers/ ./handlers/
-COPY dnd_helper/keyboards/ ./keyboards/
-COPY dnd_helper/utils/ ./utils/
-COPY dnd_helper/bot.py .
-COPY dnd_helper/main.py .
-COPY dnd_helper/config.py .
+# Копируем исходный код и зависимости из предыдущего этапа
+COPY --from=builder /build/dnd_helper ./dnd_helper
+COPY --from=builder /build/pyproject.toml ./pyproject.toml
+COPY --from=builder /build/poetry.lock ./poetry.lock
 
-CMD ["python", "main.py"]
+# Копируем зависимости (site-packages) из сборочного образа
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local/bin/poetry /usr/local/bin/poetry
+
+# Устанавливаем PYTHONPATH, чтобы импорты работали корректно
+ENV PYTHONPATH=/app
+
+# Запускаем приложение
+CMD ["python", "dnd_helper/main.py"]

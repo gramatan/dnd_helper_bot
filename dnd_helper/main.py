@@ -30,9 +30,9 @@ from handlers.statistics import on_csv_button, stats_command
 from utils.masterdata import load_beasts, load_feats, load_spells
 
 create_if_not_exist()
-spell_cards = load_spells('utils/spells.json')
-feat_cards = load_feats('utils/feats.json')
-beast_cards = load_beasts('utils/beasts.json')
+spell_cards = load_spells('dnd_helper/utils/spells.json')
+feat_cards = load_feats('dnd_helper/utils/feats.json')
+beast_cards = load_beasts('dnd_helper/utils/beasts.json')
 logging.info('Spells, feats and beasts loaded')
 
 

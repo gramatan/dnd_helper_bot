@@ -35,7 +35,7 @@ Try it here:
 1) Clone this repository to your local machine.
 2) Navigate into the cloned repository.
 3) Set up a virtual environment and activate it.
-4) Install the necessary dependencies using `pip install -r requirements.txt`.
+4) Install the necessary dependencies using `poetry install`.
 5) Replace the placeholder token in config.py with your own bot token.
 6) Run the data scraping script using `python utils/spells_scraper.py` and `python utils/feats_scraper.py`. This will populate your spells.json and feats files. You don't need to do this every time. Just use the file provided.
 7) Run the bot using `python main.py`.
@@ -50,7 +50,7 @@ To deploy the application using Docker Compose:
 3. Run the application using Docker Compose:
 
    ```bash
-   docker build -t my_dnd_bot:0.5.1 .
+   docker build -t my_dnd_bot:0.6.0 .
    docker-compose up -d
    ```
    
