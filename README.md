@@ -50,7 +50,6 @@ To deploy the application using Docker Compose:
 3. Run the application using Docker Compose:
 
    ```bash
-   docker build -t my_dnd_bot:0.6.0 .
    docker-compose up -d
    ```
    
