@@ -1,11 +1,25 @@
-import random
 import re
+import config
+import logging
+
+if hasattr(config, 'RANDOM_SOURCE') and config.RANDOM_SOURCE == "secrets":
+    import secrets
+
+    logging.info("requesting random from python secrets module")
+    rng_generator = secrets.SystemRandom()
+else:
+    import random
+    logging.info("requesting random from python random module")
+    rng_generator = random
+
+def randint(a, b):
+    return rng_generator.randint(a, b)
 
 
 def roll_dice(expression):
     # Special case for /d or /D
     if expression.lower() == 'd':
-        return f'{random.randint(1, 20)} (d20)'
+        return f'{randint(1, 20)} (d20)'
 
     # Check for numbers larger than 1000
     if any(int(num) > 1000 for num in re.findall(r'\d+', expression)):
@@ -23,7 +37,7 @@ def roll_dice(expression):
             dice = max(int(dice) if dice else 1, 1)  # At least one dice
             sides = int(sides) if sides else 20  # Default to 20 sides if no sides specified (e.g., "+5" or "-5")
             for _ in range(dice):
-                roll = sign * random.randint(1, sides)
+                roll = sign * randint(1, sides)
                 rolls.append(str(roll))
                 total += roll
 
@@ -37,5 +51,5 @@ def roll_dice(expression):
 def dx_roll(sides=20) -> tuple:
     if sides > 100000:
         sides = 20
-    roll = random.randint(1, sides)
+    roll = randint(1, sides)
     return roll, sides

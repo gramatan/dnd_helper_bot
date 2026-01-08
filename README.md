@@ -38,7 +38,8 @@ Try it here:
 4) Install the necessary dependencies using `poetry install`.
 5) Replace the placeholder token in config.py with your own bot token.
 6) Run the data scraping script using `python utils/spells_scraper.py` and `python utils/feats_scraper.py`. This will populate your spells.json and feats files. You don't need to do this every time. Just use the file provided.
-7) Run the bot using `python main.py`.
+7) Optional: specify random generator with by setting RANDOM_SOURCE in config.py
+8) Run the bot using `python main.py`.
 
 
 ## Deployment
